@@ -1,1 +1,106 @@
+CASE pickup OF 
+    (floor_above && dir_up) : 
+        SET pickup to Yes
+        
+    (floor_above && dir_down) :
+        SET pickup to No
+    
+    (floor_below && dir_down) :
+        SET pickup to Yes
 
+    (floor_below && dir_up) :
+        SET pickup to No
+
+ENDCASE
+
+SEQUENCE findElevator WITH floor, direction RETURNING selectedElev
+    
+    FOR EACH elevator in numElevators
+        OBTAIN currentPos && currentState
+        IF currentState is MOVING_UP && direction is up
+
+IF( currentFloor MINUS reqFloor EQUAL to 0) {
+    OPEN doors
+} ELSE {
+    
+}
+
+WHEN button PRESSED 
+    CALL floorLightBtn()
+        CALL waitList()
+    CALL findElevator()
+    CALL sendElevator()
+        CALL arrive()
+            
+
+SEQUENCE openDoor()
+END SEQUENCE
+
+SEQUENCE closeDoor()
+END SEQUENCE
+
+SEQUENCE 
+END SEQUENCE
+
+SEQUENCE
+END SEQUENCE
+
+SEQUENCE floorLightBtn WITH floor, direction
+    IF button PRESSED EQUAL TRUE
+        SET floorLightBtn TO On
+    ELSE 
+        DO NOTHING / shutFloorLightBtn
+
+END SEQUENCE
+
+SEQUENCE findElevator
+IF elevator arrived
+CALL arrive()
+
+SEQUENCE arrive()
+    SET floorLightBtn TO Off
+    SET dirLight TO On
+    CALL doors()
+
+SEQUENCE doors()
+    SET timer to 30 
+    WHILE timer <= 30
+    OPEN colDoors
+    OPEN elevDoors
+END SEQUENCE
+
+SEQUENCE shutFloorLightBtn
+END SEQUENCE
+
+
+
+
+
+            DETERMINE elevLevelDiff as floor - currentFloor OF 
+            SET  as selectedElev
+
+    
+    
+        btnUp
+            
+            
+            CALL callElevator()
+
+CASE 
+        
+        
+    FloorBtn[i]
+
+        DETERMINE furthestCall
+            SET furthestCall to ReqFloorBtn[i] - ReqFloorBtn[i]
+
+
+
+        
+WHILE timeOfDay >= 05:45:00 && timeOfDay <= 09:00:00 {
+}
+WHILE timeOfDay > 09:00:00 && timeOfDay <= 17:00:00 {
+}
+WHILE timeOfDay >= 17:00:00 && timeOfDay <= 05:45:00 {
+
+}
