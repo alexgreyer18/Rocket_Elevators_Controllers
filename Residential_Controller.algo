@@ -1,37 +1,83 @@
-CASE pickup OF 
-    (floor_above && dir_up) : 
-        SET pickup to Yes
-        
-    (floor_above && dir_down) :
-        SET pickup to No
-    
-    (floor_below && dir_down) :
-        SET pickup to Yes
+SET elevatorList TO numberOfElevators
 
-    (floor_below && dir_up) :
-        SET pickup to No
+SET lobby TO floor1
+SET origin TO lobby
 
-ENDCASE
+SET waitListUp to EMPTY
+SET waitListDown to EMPTY
 
-SEQUENCE findElevator WITH floor, direction RETURNING selectedElev
-    
-    FOR EACH elevator in numElevators
-        OBTAIN currentPos && currentState
-        IF currentState is MOVING_UP && direction is up
 
-IF( currentFloor MINUS reqFloor EQUAL to 0) {
-    OPEN doors
-} ELSE {
-    
-}
+
+////////////////////////////////////
+START OF PSEUDO CODE
+///////////////////////////////////
 
 WHEN button PRESSED 
-    CALL floorLightBtn()
+    CALL reqFloorBtn()
+        CALL floorLightBtn()
         CALL waitList()
     CALL findElevator()
     CALL sendElevator()
-        CALL arrive()
+        CALL arrived()
+
+
+SEQUENCE reqFloorBtn() RETURNING floor, direction to findElevator()
+    WHEN reqFloorBtnUp PRESSED
+        RETURN floor AND direction to findElevator()
+            CALL floorLightBtn()
+
+    WHEN reqFloorBtnDown PRESSED
+        RETURN floor AND direction to findElevator()
+            CALL floorLightBtn()
+END SEQUENCE
+
+SEQUENCE floorLightBtn()
+    IF button PRESSED
+        SET floorLightBtn TO On
+    ELSE 
+        DO NOTHING
+END SEQUENCE
+
+SEQUENCE findElevator() WITH floor, direction RETURNING selectedElev
+
+    FOR EACH elevator in elevatorList
+    OBTAIN currentElevFloor
+    OBTAIN direction
+    OBTAIN currentElevState
+
+        IF reqFloor EQUAL currentElevFloor AND currentElevState EQUAL idle                                                                              same floor currentState idle - Best scenario
+            THEN RETURN elevator AS BEST selectedElev
             
+        ELSE IF currentElevState EQUAL idle
+        THEN RETURN elevator AS POSSIBLE selectedElev
+
+        ELSE IF reqFloor EQUAL currentElevFloor AND currentElevDirection EQUAL direction                                                                same floor same dir - second best
+            THEN RETURN elevator AS selectedElev         
+       
+       
+        ELSE IF reqFloor IS ABOVE currentElevFloor AND reqFloor IS BEFORE currentDestination AND currentElevDirection EQUAL direction                   ABOVE req BEFORE currentDestination same dir
+            THEN RETURN elevator AS selectedElev
+
+        ELSE IF reqFloor IS ABOVE currentElevFloor AND reqFloor IS BEFORE currentDestination AND currentElevDirection NOT EQUAL direction
+            THEN RETURN elevator AS POSSIBLE selectedElev / pick up on way down
+
+        ELSE IF reqFloor IS BELOW currentElevFloor AND reqFloor IS BEFORE currentDestination AND currentElevDirection EQUAL direction                   ABOVE req BEFORE currentDestination same dir
+            THEN RETURN elevator AS selectedElev
+                  
+        ELSE IF reqFloor IS ABOVE currentElevFloor AND reqFloor IS BEFORE currentDestination AND currentElevDirection EQUAL direction  
+        
+        
+        
+        ELSE IF reqFloor IS BELOW currentElevFloor
+        THEN RETURN elevator AS selectedElev
+        
+        ELSE IF reqFloor IS ABOVE currentElevFloor
+        THEN RETURN elevator AS selectedElev
+        
+END SEQUENCE
+
+SEQUENCE waitList()
+END SEQUENCE
 
 SEQUENCE openDoor()
 END SEQUENCE
@@ -39,28 +85,11 @@ END SEQUENCE
 SEQUENCE closeDoor()
 END SEQUENCE
 
-SEQUENCE 
-END SEQUENCE
-
-SEQUENCE
-END SEQUENCE
-
-SEQUENCE floorLightBtn WITH floor, direction
-    IF button PRESSED EQUAL TRUE
-        SET floorLightBtn TO On
-    ELSE 
-        DO NOTHING / shutFloorLightBtn
-
-END SEQUENCE
-
-SEQUENCE findElevator
-IF elevator arrived
-CALL arrive()
-
-SEQUENCE arrive()
+SEQUENCE arrived()
     SET floorLightBtn TO Off
     SET dirLight TO On
     CALL doors()
+END SEQUENCE
 
 SEQUENCE doors()
     SET timer to 30 
@@ -69,22 +98,9 @@ SEQUENCE doors()
     OPEN elevDoors
 END SEQUENCE
 
-SEQUENCE shutFloorLightBtn
-END SEQUENCE
 
 
 
-
-
-            DETERMINE elevLevelDiff as floor - currentFloor OF 
-            SET  as selectedElev
-
-    
-    
-        btnUp
-            
-            
-            CALL callElevator()
 
 CASE 
         
