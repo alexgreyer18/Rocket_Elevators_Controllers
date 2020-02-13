@@ -8,119 +8,190 @@ OBJECTS TO CONTROL:
     CloseDoorButton: Button inside Elevator to close door 
 
 
-
-
 'START OF PSEUDO CODE'
 
-BUTTON WAS PRESSED 
-    SEQUENCE reqElevator USING floor, direction
-    IF selectedElevator IS NULL THEN
-        CALL reqFloorBtn WITH floor, direction TO findElevator
-        CALL findElevator WITH floor, direction RETURNING selectedElevator
-    END IF
-    CALL sendElevator WITH floor, selectedElevator
-    CALL operateElevator WITH selectedElevator
+    SEQUENCE reqElevator WITH floor, direction
+        CALL reqFloorBtn
+        CALL findElevator
+        CALL operateElevator
     END SEQUENCE
 
-    SEQUENCE reqFloorBtn RETURNING floor, direction to findElevator
+    SEQUENCE reqFloorBtn WITH floor, direction
         IF reqFloorBtn was PRESSED THEN
-            RETURN floor AND direction to findElevator
-            REPEAT
-                SET floorLightBtn TO ON
-            UNTIL selectedElevator hasArrived
+            PUSH floor AND direction to waitList
+            SET floorLightBtn TO ON
         ELSE
             SET floorLightBtn TO OFF
     END SEQUENCE
 
-    SEQUENCE insideBtn USING floor, selectedElevator
+    SEQUENCE findElevator WITH floor, direction RETURNING selectedElevator
+
+        INIT BestElevator TO NULL;
+        INIT BestElevatorCase TO NULL; 
+        
+        SET elevatorList TO array of numberOfElevators Elevator
+ 
+        IF selectedElevator IS NULL THEN
+        
+            FOR EACH Elevator in ElevatorList
+                OBTAIN currentElevatorFloor
+                OBTAIN currentElevatorDirection
+                OBTAIN currentElevatorState
+
+                IF reqFloor EQUAL currentElevatorFloor AND idle OR reqFloor EQUAL currentElevatorFloor AND currentElevatorDirection EQUAL direction THEN 
+                    IF BestElevator IS NULL OR BestElevatorCase > 1
+                        SET BestElevator as Elevator
+                        SET BestElevatorCase as 1  
+                    END IF 
+
+                ELSE IF reqFloor EQUAL currentElevatorFloor AND currentElevatorState EQUAL idle THEN
+                    IF BestElevator IS NULL OR BestElevatorCase > 2
+                        SET BestElevator as Elevator
+                        SET BestElevatorCase as 2
+                    END IF
+
+                ELSE IF reqFloor ABOVE OR BELOW currentElevatorFloor AND currentElevatorDirection EQUAL TO direction THEN 
+                    IF BestElevator IS NULL OR BestElevatorCase > 3
+                        FOR EACH Elevator in ElevatorList
+                            SET BestElevator as Elevator USING lowestIndexDifference
+                            SET BestElevatorCase as 3
+                        END FOR
+                    END IF
+
+
+                ELSE IF reqFloor ABOVE OR BELOW currentElevatorFloor AND currentElevatorDirection NOT EQUAL TO direction THEN 
+                    IF BestElevator IS NULL OR BestElevatorCase > 4
+                        SET BestElevator as Elevator USING lowestIndexDifference
+                        SET BestElevatorCase as 4
+                    END IF
+
+                END IF
+                       
+            END FOR
+
+        RETURN BestElevator as selectedElevator
+    END SEQUENCE
+
+    SEQUENCE operateElevator WITH selectedElevator
+        
+        READ systemStatus FROM systemStatusCheck WITH Elevator
+        IF systemStatus EQUAL is_safe THEN
+    
+            GET floor FROM sorted_waitList
+            IF sorted_waitList NOT EQUAL NULL THEN
+
+                IF reqFloor EQUAL currentElevatorFloor THEN
+                    CALL hasArrived
+                    POP reqFloor FROM sorted_waitList
+                
+                ELSE IF reqFloor GREATER THAN currentElevatorFloor THEN
+                    REPEAT
+                        CALL goUp
+                    UNTIL 
+                        currentElevatorFloor EQUAL reqFloor
+                    CALL hasArrived
+                    POP reqFloor FROM sorted_waitList
+                END IF
+
+                IF reqFloor LESSER THAN currentElevatorFloor THEN
+                    REPEAT
+                        CALL goDown
+                    UNTIL 
+                        currentElevatorFloor EQUAL reqFloor
+                    CALL hasArrived
+                    POP reqFloor FROM sorted_waitList
+                END IF
+
+            ELSE
+                SET currentElevatorState to idle
+
+    END SEQUENCE
+    
+    SEQUENCE lowestIndexDifference
+        FOR EACH i in reqFloor index
+            FOR EACH j in currentElevatorFloor index
+                SET lowestIndexDifference TO ABSOLUTE i MINUS j
+            END FOR
+        END FOR
+    END SEQUENCE
+
+    SEQUENCE insideBtn WITH floor, selectedElevator
         IF insideBtn was PRESSED THEN
-            RETURN floor AND direction to waitList
+            PUSH floor AND direction to waitList
             SET insideBtn TO ON
         ELSE
         SET insideBtn TO OFF
     END SEQUENCE
 
-    SEQUENCE findElevator WITH floor, direction RETURNING selectedElevator
-        IF selectedElevator IS NULL THEN
-        INIT BestElevator TO NULL;
-        INIT BestElevatorCase TO NULL;
-            FOR EACH Elevator in ElevatorList
-                OBTAIN currentElevatorFloor
-                OBTAIN direction
-                OBTAIN currentElevatorState
-
-                    IF reqFloor EQUAL currentElevatorFloor AND idle OR reqFloor EQUAL currentElevatorFloor AND currentElevatorDirection EQUAL direction THEN 
-                        SET BestElevator as Elevator
-                        SET BestElevatorCase as 1       
-                
-                RETURN Elevator AS selectedElevator
-
-                SET selectedElevator AS BestElevatorCase
-                
-    END SEQUENCE
-
-    SEQUENCE operateElevator WITH selectedElevator
-    
-        GET floor FROM sorted_waitList
-        IF sorted_waitList NOT EQUAL NULL THEN
-
-            IF reqFloor EQUAL currentElevatorFloor THEN
-                CALL Doors WITH Elevator
-                POP reqFloor FROM sorted_waitList
-            END IF
-            
-            IF reqFloor GREATER THAN currentElevatorFloor THEN
-                REPEAT
-                    CALL goUp WITH Elevator
-                UNTIL 
-                    currentElevatorFloor EQUAL reqFloor
-                CALL Doors WITH Elevator
-                POP reqFloor FROM sorted_waitList
-            END IF
-
-            IF reqFloor LESSER THAN currentElevatorFloor THEN
-                REPEAT
-                    CALL goDown WITH Elevator
-                UNTIL 
-                    currentElevatorFloor EQUAL reqFloor
-                CALL Doors WITH Elevator
-                POP reqFloor FROM sorted_waitList
-            END IF
-
-        ELSE
-            SET currentElevatorState to idle
-
-    END SEQUENCE
-
-        INIT waitList AS NULL;
     SEQUENCE waitList RETURNING sorted_waitList
         GET list FROM waitList
         SORT reqFloor WITH elevatorSortingAlgorithm RETURNING sorted_list
         INIT sorted_waitList AS EQUAL sorted_list
     END SEQUENCE
 
-SEQUENCE hasarrived
-    SET floorLightBtn TO Off
-    SET dirLight TO On
-END SEQUENCE
+    SEQUENCE hasArrived WITH selectedElevator
+        SET floorLightBtn TO Off
+        SET directionLight TO On
+        CALL operateDoors USING selectedlElevator
+    END SEQUENCE
 
-SEQUENCE doors WITH hasArrived USING Elevator
-    IF hasArrived IS TRUE THEN
-    SET timer to 10
-    WHILE timer <= 10
-        SET doorsElevator TO OPEN
-    OPEN elevDoors
-    'obstructed'
-    'overweight'
-END SEQUENCE
+    SEQUENCE operateDoors WITH selectedElevator
+       CALL systemStatusCheck
+            WHILE Elevator is_safe NOT EQUAL TRUE
+            REPEAT
+                INCREMENT timer by 2
+            UNTIL Elevator is_safe EQUAL TRUE
 
-SET floors TO array OF numberOfFloor floor
-SEQUENCE goDown
-    FOR EACH numberOfFloor IN floors 
-    WHILE reqFloor GREATER THAN
-END SEQUENCE
+            IF timer GREATER than 0        
+                SET doorsElevator TO OPEN
+            ELSE 
+                SET doorsElevator TO CLOSED         
+            END IF
+    END SEQUENCE
 
-SEQUENCE goUp
+    SEQUENCE goDown WITH selectedElevator
+        FOR EACH numberOfFloor IN floors 
+            WHILE numberOfFloor index GREATER THAN reqFloor index
+                DECREASE numberOfFloor by 1
+        END FOR
+    END SEQUENCE
 
-END SEQUENCE
+    SEQUENCE goUp WITH selectedElevator
+        FOR EACH numberOfFloor IN floors 
+            WHILE numberOfFloor index LESSER THAN reqFloor index
+                INCREMENT numberOfFloor by 1
+        END FOR
+    END SEQUENCE
+
+    SEQUENCE systemStatusCheck USING selectedElevator
+        CALL overWeight
+        CALL obstructed
+
+        IF overWeight EQUAL FALSE AND obstructed EQUAL FALSE THEN
+            SET is_safe TO TRUE
+        ELSE
+            SET is_safe TO FALSE
+            REPEAT 
+                CALL systemStatusCheck
+            UNTIL is_safe EQUAL TRUE
+            RETURN is_safe
+        END IF
+    END SEQUENCE
+
+    SEQUENCE obstructed USING Elevator
+        READ captor FROM Doors
+        IF obstructed THEN
+            RETURN TRUE
+        ELSE 
+            RETURN FALSE
+        END IF
+    END SEQUENCE
+
+    SEQUENCE overWeight USING Elevator
+        READ Weight FROM Elevator
+        IF Weight GREATER THAN MaxWeight THEN
+           RETURN TRUE
+        ELSE RETURN FALSE
+        END IF
+    END SEQUENCE
 
