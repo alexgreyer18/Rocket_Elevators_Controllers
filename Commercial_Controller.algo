@@ -1,21 +1,27 @@
+'PROJECT EXPLANATION AND DECLARATIONS'
+
+This program will control a residential elevator system
+
 OBJECTS TO CONTROL:
     Battery: Multiple elevator columns
     Column: Elevator shaft containing Elevator cages
     Cage: Elevator up or down
     CallButton: Up & Down buttons on each floors to call for Elevator
-    FloorRequestButton: Buttons inside cage to chose destination 
     Doors: Elevator doors, timer open before closing 10s 
     OpenDoorButton: Button inside Elevator to keep door open
     CloseDoorButton: Button inside Elevator to close door ons
     Floor display: Battery command pannel 
 
-SET lobbyLevel TO 1
+SET lobbyLevel TO 0
+SET selectedElevator TO " "
+SET waitList TO array OF " "
+SET ElevatorList TO array OF numberOfElevators Elevator
 
 SET basementColumn TO numberOfServicedFloors1
 SET numberOfServicedFloors1 TO array OF numberOfFloors floors, lobbyLevel         '(-6 to -1) + lobbyLevel
 
 SET Column1 TO numberOfServicedFloors2
-SET numberOfServicedFloors2 TO array OF numberOfFloors floors, lobbyLevel         '(2 to 20) + lobbyLevel
+SET numberOfServicedFloors2 TO array OF numberOfFloors floors, lobbyLevel         '(1 to 20) + lobbyLevel
 
 SET Column2 TO numberOfServicedFloors3
 SET numberOfServicedFloors3 TO array OF numberOfFloors floors, lobbyLevel         '(21 to 40) + lobbyLevel
@@ -24,28 +30,21 @@ SET Column3 TO numberOfServicedFloors4
 SET numberOfServicedFloors4 TO array OF numberOfFloors floors, lobbyLevel         '(41 to 66) + lobbyLevel
 
 
+
 'START OF PSEUDO CODE WITH MODERN APPROACH'
-
-SEQUENCES:
-    
+ 
+'Main sequence'
 SEQUENCE commandPanel WITH floor, direction
-    CALL battery
-    CALL operateElevator
+    CALL requestedFloorBtn USING floor, direction
+    CALL battery USING floor, direction
+    CALL operateElevator USING selectedElevator
 END SEQUENCE
 
-SEQUENCE checkTime WITH timeOfDay
-SEQUENCE checkTime USING Elevator
-    READ Weight FROM Elevator
-    IF Weight GREATER THAN MaxWeight THEN
-        RETURN TRUE
-    ELSE RETURN FALSE
-    END IF
-END SEQUENCE
 
-SEQUENCE battery
-    CALL requestedFloorBtn
-    CALL findColumn 
-    CALL operateElevator
+'All other sequences the Main sequence makes use of'
+SEQUENCE battery WITH floor, direction
+    CALL findColumn USING floor, direction RETURNING selectedColumn
+    CALL findElevator USING selectedColumn RETURNING selectedElevator
 END SEQUENCE
     
 SEQUENCE requestedFloorBtn WITH floor, direction
@@ -57,20 +56,18 @@ SEQUENCE requestedFloorBtn WITH floor, direction
 END SEQUENCE
 
 SEQUENCE findColumn WITH floor, direction RETURNING selectedColumn
-    IF floorReq EQUAL OR LESSER THAN RC THEN
+    IF floorRequested EQUAL OR LESSER THAN RC THEN
         RETURN basementColumn AS selectedColumn
 
-    ELSE IF floorReq LESSER or EQUAL 20 AND GREATER OR EQUAL TO RC THEN
+    ELSE IF floorRequested LESSER or EQUAL 20 AND GREATER OR EQUAL TO RC THEN
         RETURN Column1 AS selectedColumn
 
-    ELSE IF floorReq LESSER or EQUAL 40 AND GREATER THAN 20 OR EQUAL TO RC THEN
+    ELSE IF floorRequested LESSER or EQUAL 40 AND GREATER THAN 20 OR EQUAL TO RC THEN
         RETURN Column2 AS selectedColumn
 
-    ELSE IF floorReq LESSER OR EQUAL 66 AND GREATER THAN 40 OR EQUAL TO RC THEN
+    ELSE IF floorRequested LESSER OR EQUAL 66 AND GREATER THAN 40 OR EQUAL TO RC THEN
         RETURN Column3 AS selectedColumn
     END IF
-
-    CALL findElevator
 END SEQUENCE
 
 SEQUENCE findElevator WITH selectedColumn RETURNING selectedElevator
@@ -88,30 +85,34 @@ SEQUENCE findElevator WITH selectedColumn RETURNING selectedElevator
 
             IF requestedFloor EQUAL currentElevatorFloor AND currentElevatorState EQUAL idle OR requestedFloor EQUAL currentElevatorFloor AND currentElevatorDirection EQUAL direction THEN 
                 IF BestElevator IS NULL OR BestElevatorCase > 1
-                    SET BestElevator as Elevator
+                    SET Elevator TO BestElevator 
                     SET BestElevatorCase as 1  
                 
             ELSE IF requestedFloor EQUAL currentElevatorFloor AND currentElevatorState EQUAL idle THEN
                 IF BestElevator IS NULL OR BestElevatorCase > 2
-                    SET BestElevator as Elevator
+                    SET Elevator TO BestElevator 
                     SET BestElevatorCase as 2
                 
             ELSE IF requestedFloor ABOVE OR BELOW currentElevatorFloor AND currentElevatorDirection EQUAL TO direction THEN 
                 IF BestElevator IS NULL OR BestElevatorCase > 3
                     FOR EACH Elevator in ElevatorList
-                        SET BestElevator as Elevator USING lowestIndexDifference
+                        COMPUTE indexDifference RETURNING BestElevator
                         SET BestElevatorCase as 3
-                    END FOR     
+                    END FOR
+                END IF   
 
             ELSE IF requestedFloor ABOVE OR BELOW currentElevatorFloor AND currentElevatorDirection NOT EQUAL TO direction THEN 
                 IF BestElevator IS NULL OR BestElevatorCase > 4
-                    SET BestElevator as Elevator USING lowestIndexDifference
-                    SET BestElevatorCase as 4                    
-            END IF
-                    
+                    FOR EACH Elevator in ElevatorList
+                        COMPUTE indexDifference RETURNING BestElevator
+                        SET BestElevatorCase as 4
+                    END FOR
+                END IF                    
+            END IF    
         END FOR
-
-    RETURN BestElevator as selectedElevator
+    END IF
+    SET BestElevator TO selectedElevator 
+    RETURN selectedElevator 
 END SEQUENCE
 
 SEQUENCE operateElevator WITH selectedElevator
@@ -125,27 +126,27 @@ SEQUENCE operateElevator WITH selectedElevator
         IF sorted_waitList NOT EQUAL NULL THEN
 
             IF requestedFloor EQUAL currentElevatorFloor THEN
-                CALL hasArrived
+                CALL hasArrived USING selectedElevator
                 POP requestedFloor FROM sorted_waitList
             
             ELSE IF requestedFloor GREATER THAN currentElevatorFloor THEN
                 REPEAT
-                    CALL goUp
+                    CALL goUp USING selectedElevator
                 UNTIL currentElevatorFloor EQUAL requestedFloor
-                CALL hasArrived
+                CALL hasArrived USING selectedElevator
                 POP requestedFloor FROM sorted_waitList
            
 
             ELSE IF requestedFloor LESSER THAN currentElevatorFloor THEN
                 REPEAT
-                    CALL goDown
+                    CALL goDown USING selectedElevator
                 UNTIL currentElevatorFloor EQUAL requestedFloor
-                CALL hasArrived
+                CALL hasArrived USING selectedElevator
                 POP requestedFloor FROM sorted_waitList
             END IF
         'execute if sorted_waitlist is empty'
         ELSE
-            CALL setToIdle
+            CALL setToIdle USING selectedElevator
         END IF
     END IF
 END SEQUENCE
@@ -161,32 +162,35 @@ SEQUENCE setToIdle WITH selectedElevator
     END FOR
 END SEQUENCE
 
+SEQUENCE indexDifference WITH ElevatorList
+    FOR EACH Elevator IN ElevatorList
+        SET indexDifference TO array OF ABSOLUTE requestedFloor MINUS currentElevatorFloor
+    END FOR
+    IF indexDifference EQUAL lowestIndex
+        SET Elevator TO BestElevator 
+    END IF
+    RETURN BestElevator
+END SEQUENCE
+
+SEQUENCE waitList RETURNING sorted_waitList
+    GET requestedFloors FROM waitList
+    SORT waitList WITH elevatorSortingAlgorithm
+    SET waitList TO sorted_list
+    RETURN sorted_waitList
+END SEQUENCE
+
 SEQUENCE hasArrived WITH selectedElevator
     SET floorLightBtn TO Off
     SET directionLight TO On
     CALL operateDoors USING selectedlElevator
 END SEQUENCE
 
-SEQUENCE lowestIndexDifference
-    FOR EACH i in requestedFloor index
-        FOR EACH j in currentElevatorFloor index
-            SET lowestIndexDifference TO ABSOLUTE i MINUS j
-        END FOR
-    END FOR
-END SEQUENCE
-
-SEQUENCE waitList RETURNING sorted_waitList
-    GET list FROM waitList
-    SORT requestedFloor WITH elevatorSortingAlgorithm RETURNING sorted_list
-    INIT sorted_waitList AS EQUAL sorted_list
-END SEQUENCE
-
 SEQUENCE operateDoors WITH selectedElevator
-    CALL systemStatusCheck
-        WHILE Elevator is_safe NOT EQUAL TRUE
+    CALL checkSystemStatus USING selectedElevator
+        WHILE selectedElevator is_safe NOT EQUAL TRUE
         REPEAT
             INCREMENT timer by 2
-        UNTIL Elevator is_safe EQUAL TRUE
+        UNTIL selectedElevator is_safe EQUAL TRUE
 
         IF timer GREATER than 0        
             SET doorsElevator TO OPEN
@@ -209,7 +213,7 @@ SEQUENCE goUp WITH selectedElevator
     END FOR
 END SEQUENCE
 
-SEQUENCE systemStatusCheck USING selectedElevator
+SEQUENCE checkSystemStatus WITH selectedElevator
     CALL overWeight
     CALL obstructed
 
@@ -218,14 +222,14 @@ SEQUENCE systemStatusCheck USING selectedElevator
     ELSE
         SET is_safe TO FALSE
         REPEAT 
-            CALL systemStatusCheck
+            CALL checkSystemStatus USING selectedElevator
         UNTIL is_safe EQUAL TRUE
         RETURN is_safe
     END IF
 END SEQUENCE
 
-SEQUENCE obstructed USING Elevator
-    READ captor FROM Doors
+SEQUENCE is_obstructed WITH selectedElevator
+    READ captor FROM doorsElevator
     IF obstructed THEN
         RETURN TRUE
     ELSE 
@@ -233,7 +237,7 @@ SEQUENCE obstructed USING Elevator
     END IF
 END SEQUENCE
 
-SEQUENCE overWeight USING Elevator
+SEQUENCE is_overWeight WITH selectedElevator
     READ Weight FROM Elevator
     IF Weight GREATER THAN MaxWeight THEN
         RETURN TRUE

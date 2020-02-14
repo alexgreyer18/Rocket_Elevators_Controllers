@@ -1,3 +1,7 @@
+'PROJECT EXPLANATION AND DECLARATIONS'
+
+This program will control a residential elevator system
+
 OBJECTS TO CONTROL:
     Column: Elevator shaft containing Elevator cages
     Cage: Elevator up or down
@@ -7,19 +11,27 @@ OBJECTS TO CONTROL:
     OpenDoorButton: Button inside Elevator to keep door open
     CloseDoorButton: Button inside Elevator to close door 
 
-SET lobbyLevel TO 1
+SET lobbyLevel TO 0
+SET selectedElevator TO " "
+SET waitList TO array OF " "
+SET ElevatorList TO array OF numberOfElevators Elevator
+SET floors TO array OF numberOfFloors floor
+
 
 'START OF PSEUDO CODE'
 
-SEQUENCE reqElevator WITH floor, direction
-    CALL requestedFloorBtn
-    CALL findElevator
-    CALL operateElevator
+'Main sequence'
+SEQUENCE requestElevator WITH floor, direction
+    CALL requestedFloorBtn USING floor, direction
+    CALL findElevator USING floor, direction RETURNING selectedElevator
+    CALL operateElevator USING selectedElevator
 END SEQUENCE
 
+
+'All other sequences the Main sequence makes use of'
 SEQUENCE requestedFloorBtn WITH floor, direction
     IF requestedFloorBtn was PRESSED THEN
-        PUSH floor AND direction to waitList
+        PUSH floor AND direction TO waitList
         SET floorLightBtn TO ON
     ELSE
         SET floorLightBtn TO OFF
@@ -30,8 +42,6 @@ SEQUENCE findElevator WITH floor, direction RETURNING selectedElevator
     INIT BestElevator TO NULL;
     INIT BestElevatorCase TO NULL; 
     
-    SET ElevatorList TO array of numberOfElevators Elevator
-
     IF selectedElevator IS NULL THEN
     
         FOR EACH Elevator in ElevatorList
@@ -41,41 +51,41 @@ SEQUENCE findElevator WITH floor, direction RETURNING selectedElevator
 
             IF requestedFloor EQUAL currentElevatorFloor AND currentElevatorState EQUAL idle OR requestedFloor EQUAL currentElevatorFloor AND currentElevatorDirection EQUAL direction THEN 
                 IF BestElevator IS NULL OR BestElevatorCase > 1
-                    SET BestElevator as Elevator
+                    SET Elevator TO BestElevator 
                     SET BestElevatorCase as 1  
                 END IF 
 
             ELSE IF requestedFloor EQUAL currentElevatorFloor AND currentElevatorState EQUAL idle THEN
                 IF BestElevator IS NULL OR BestElevatorCase > 2
-                    SET BestElevator as Elevator
+                    SET Elevator TO BestElevator 
                     SET BestElevatorCase as 2
                 END IF
 
             ELSE IF requestedFloor ABOVE OR BELOW currentElevatorFloor AND currentElevatorDirection EQUAL TO direction THEN 
                 IF BestElevator IS NULL OR BestElevatorCase > 3
                     FOR EACH Elevator in ElevatorList
-                        SET BestElevator as Elevator USING lowestIndexDifference
+                        COMPUTE indexDifference RETURNING BestElevator
                         SET BestElevatorCase as 3
                     END FOR
                 END IF
 
-
             ELSE IF requestedFloor ABOVE OR BELOW currentElevatorFloor AND currentElevatorDirection NOT EQUAL TO direction THEN 
                 IF BestElevator IS NULL OR BestElevatorCase > 4
-                    SET BestElevator as Elevator USING lowestIndexDifference
-                    SET BestElevatorCase as 4
+                    FOR EACH Elevator in ElevatorList
+                        COMPUTE indexDifference RETURNING BestElevator
+                        SET BestElevatorCase as 4
+                    END FOR
                 END IF
-
             END IF
-                    
         END FOR
-
-    RETURN BestElevator as selectedElevator
+    END IF
+    SET BestElevator TO selectedElevator 
+    RETURN selectedElevator 
 END SEQUENCE
 
 SEQUENCE operateElevator WITH selectedElevator
     
-    READ systemStatus FROM systemStatusCheck WITH Elevator
+    READ systemStatus FROM checkSystemStatus USING selectedElevator
     IF systemStatus EQUAL is_safe THEN
         
         GET floor FROM sorted_waitList
@@ -84,48 +94,49 @@ SEQUENCE operateElevator WITH selectedElevator
         IF sorted_waitList NOT EQUAL NULL THEN
 
             IF requestedFloor EQUAL currentElevatorFloor THEN
-                CALL hasArrived
+                CALL hasArrived USING selectedElevator
                 POP requestedFloor FROM sorted_waitList
             
             ELSE IF requestedFloor GREATER THAN currentElevatorFloor THEN
                 REPEAT
-                    CALL goUp
+                    CALL goUp USING selectedElevator
                 UNTIL currentElevatorFloor EQUAL requestedFloor
-                CALL hasArrived
+                CALL hasArrived USING selectedElevator
                 POP requestedFloor FROM sorted_waitList
-           
-
+                
             ELSE IF requestedFloor LESSER THAN currentElevatorFloor THEN
                 REPEAT
-                    CALL goDown
+                    CALL goDown USING selectedElevator
                 UNTIL currentElevatorFloor EQUAL requestedFloor
-                CALL hasArrived
+                CALL hasArrived USING selectedElevator
                 POP requestedFloor FROM sorted_waitList
             END IF
         'execute if sorted_waitlist is empty'
         ELSE
-            CALL setToIdle
+            CALL setToIdle USING selectedElevator
         END IF
     END IF
 END SEQUENCE
 
 SEQUENCE setToIdle WITH selectedElevator
     SET currentElevatorState TO idle
-    SET ElevatorList TO array of numberOfElevators Elevator
-    FOR EACH Elevator IN ElevatorList
-        IF currentElevatorState EQUAL idle
-            REPEAT  
-                goDown
-            UNTIL currentElevatorFloor EQUAL lobbyLevel
-    END FOR
+    CALL checkTimeOfDay USING ElevatorList
+        FOR EACH Elevator IN ElevatorList
+            IF currentElevatorState EQUAL idle
+                REPEAT  
+                    CALL goDown USING selectedElevator
+                UNTIL currentElevatorFloor EQUAL lobbyLevel
+        END FOR
 END SEQUENCE
 
-SEQUENCE lowestIndexDifference
-    FOR EACH i in requestedFloor index
-        FOR EACH j in currentElevatorFloor index
-            SET lowestIndexDifference TO ABSOLUTE i MINUS j
-        END FOR
+SEQUENCE indexDifference WITH ElevatorList
+    FOR EACH Elevator IN ElevatorList
+        SET indexDifference TO array OF ABSOLUTE requestedFloor MINUS currentElevatorFloor
     END FOR
+    IF indexDifference EQUAL lowestIndex
+        SET Elevator TO BestElevator 
+    END IF
+    RETURN BestElevator
 END SEQUENCE
 
 SEQUENCE insideBtn WITH floor, selectedElevator
@@ -137,23 +148,24 @@ SEQUENCE insideBtn WITH floor, selectedElevator
 END SEQUENCE
 
 SEQUENCE waitList RETURNING sorted_waitList
-    GET list FROM waitList
-    SORT requestedFloor WITH elevatorSortingAlgorithm RETURNING sorted_list
-    INIT sorted_waitList AS EQUAL sorted_list
+    GET requestedFloors FROM waitList
+    SORT waitList WITH elevatorSortingAlgorithm
+    SET waitList TO sorted_list
+    RETURN sorted_waitList
 END SEQUENCE
 
 SEQUENCE hasArrived WITH selectedElevator
     SET floorLightBtn TO Off
     SET directionLight TO On
-    CALL operateDoors
+    CALL operateDoors USING selectedElevator
 END SEQUENCE
 
 SEQUENCE operateDoors WITH selectedElevator
-    CALL systemStatusCheck
-        WHILE Elevator is_safe NOT EQUAL TRUE
+    CALL checkSystemStatus USING selectedElevator
+        WHILE selectedElevator is_safe NOT EQUAL TRUE
         REPEAT
             INCREMENT timer by 2
-        UNTIL Elevator is_safe EQUAL TRUE
+        UNTIL selectedElevator is_safe EQUAL TRUE
 
         IF timer GREATER than 0        
             SET doorsElevator TO OPEN
@@ -176,22 +188,23 @@ SEQUENCE goUp WITH selectedElevator
     END FOR
 END SEQUENCE
 
-SEQUENCE systemStatusCheck WITH selectedElevator
+SEQUENCE checkSystemStatus WITH selectedElevator
     CALL overWeight
     CALL obstructed
-
-    IF overWeight EQUAL FALSE AND obstructed EQUAL FALSE THEN
-        SET is_safe TO TRUE
-    ELSE
-        SET is_safe TO FALSE
-        REPEAT 
-            CALL systemStatusCheck
-        UNTIL is_safe EQUAL TRUE
-        RETURN is_safe
-    END IF
+    FOR EACH Elevator IN ElevatorList
+        IF overWeight EQUAL FALSE AND obstructed EQUAL FALSE THEN
+            SET is_safe TO TRUE
+        ELSE
+            SET is_safe TO FALSE
+            REPEAT 
+                CALL checkSystemStatus USING selectedElevator
+            UNTIL is_safe EQUAL TRUE
+            RETURN is_safe
+        END IF
+    END FOR
 END SEQUENCE
 
-SEQUENCE obstructed WITH Elevator
+SEQUENCE is_obstructed WITH selectedElevator
     READ captor FROM doorsElevator
     IF obstructed THEN
         RETURN TRUE
@@ -200,11 +213,10 @@ SEQUENCE obstructed WITH Elevator
     END IF
 END SEQUENCE
 
-SEQUENCE overWeight USING Elevator
+SEQUENCE is_overWeight WITH selectedElevator
     READ Weight FROM Elevator
     IF Weight GREATER THAN MaxWeight THEN
         RETURN TRUE
     ELSE RETURN FALSE
     END IF
 END SEQUENCE
-
