@@ -55,25 +55,19 @@ SEQUENCE findElevator WITH floor, direction RETURNING selectedElevator
                     SET BestElevatorCase as 1  
                 END IF 
 
-            ELSE IF requestedFloor EQUAL currentElevatorFloor AND currentElevatorState EQUAL idle THEN
-                IF BestElevator IS NULL OR BestElevatorCase > 2
-                    SET Elevator TO BestElevator 
-                    SET BestElevatorCase as 2
-                END IF
-
             ELSE IF requestedFloor ABOVE OR BELOW currentElevatorFloor AND currentElevatorDirection EQUAL TO direction THEN 
-                IF BestElevator IS NULL OR BestElevatorCase > 3
+                IF BestElevator IS NULL OR BestElevatorCase > 2
                     FOR EACH Elevator in ElevatorList
                         COMPUTE indexDifference RETURNING BestElevator
-                        SET BestElevatorCase as 3
+                        SET BestElevatorCase as 2
                     END FOR
                 END IF
 
             ELSE IF requestedFloor ABOVE OR BELOW currentElevatorFloor AND currentElevatorDirection NOT EQUAL TO direction THEN 
-                IF BestElevator IS NULL OR BestElevatorCase > 4
+                IF BestElevator IS NULL OR BestElevatorCase > 3
                     FOR EACH Elevator in ElevatorList
                         COMPUTE indexDifference RETURNING BestElevator
-                        SET BestElevatorCase as 4
+                        SET BestElevatorCase as 3
                     END FOR
                 END IF
             END IF
@@ -103,7 +97,7 @@ SEQUENCE operateElevator WITH selectedElevator
                 UNTIL currentElevatorFloor EQUAL requestedFloor
                 CALL hasArrived USING selectedElevator
                 POP requestedFloor FROM sorted_waitList
-                
+
             ELSE IF requestedFloor LESSER THAN currentElevatorFloor THEN
                 REPEAT
                     CALL goDown USING selectedElevator
