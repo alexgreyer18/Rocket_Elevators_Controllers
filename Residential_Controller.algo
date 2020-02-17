@@ -11,12 +11,11 @@ OBJECTS TO CONTROL:
     OpenDoorButton: Button inside Elevator to keep door open
     CloseDoorButton: Button inside Elevator to close door 
 
-SET lobbyLevel TO 0
 SET selectedElevator TO " "
 SET waitList TO array OF " "
 SET ElevatorList TO array OF numberOfElevators Elevator
 SET floors TO array OF numberOfFloors floor
-
+SET RC TO 0
 
 'START OF PSEUDO CODE'
 
@@ -119,7 +118,7 @@ SEQUENCE setToIdle WITH selectedElevator
             IF currentElevatorState EQUAL idle
                 REPEAT  
                     CALL goDown USING selectedElevator
-                UNTIL currentElevatorFloor EQUAL lobbyLevel
+                UNTIL currentElevatorFloor EQUAL RC
         END FOR
 END SEQUENCE
 
