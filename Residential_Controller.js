@@ -4,12 +4,11 @@ La méthode 1 doit obligatoirement retourner l’ascenseur choisi et faire bouge
 Méthode 2: RequestFloor(Elevator, RequestedFloor)
 La méthode 2 doit obligatoirement faire bouger les ascenseurs dans son traitement. 
 */
-//repl.it/repls/WorstVigorousCad
 
-https: var selectedElevator = null;
+var selectedElevator = null;
 var waitList = [];
 var floorList = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
-var RC = floors.indexOf('0');
+var RC = floor.indexOf('0');
 
 // Elevator constructor
 function Elevator(floor, direction, status) {
@@ -34,44 +33,37 @@ var elevators = makeElevators(2);
 
 console.log(elevators);
 
-// function findElevator(floor, direction) { // return selectedElevator
 
-//     INIT BestElevator TO NULL;
-//     INIT BestElevatorCase TO NULL;
+function ButtonUp(floor, direction) {
+	this.floor = floor;
+	this.direction = direction;
+}
 
-//     if (selectedElevator == null) {
+function makeButtonUps(n) {
+	let buttonUpList = new Array(n);
+	for (var i = 0; i < n; ++i) {
+		buttonUpList[i] = new ButtonUp(floor, direction);
+	}
+	return buttonUpList;
+}
 
-//         elevatorList.forEach(elevators => {
-//             OBTAIN currentElevatorFloor
-//             OBTAIN currentElevatorDirection
-//             OBTAIN currentElevatorState
+var buttonUpList = makeButtonUps(3);
 
-//         });
-//     }
-//             IF requestedFloor EQUAL currentElevatorFloor AND currentElevatorState EQUAL idle OR requestedFloor EQUAL currentElevatorFloor AND currentElevatorDirection EQUAL direction THEN
-//                 IF BestElevator IS NULL OR BestElevatorCase > 1
-//                     SET Elevator TO BestElevator
-//                     SET BestElevatorCase as 1
-//                 END IF
+console.log(buttonUpList);
 
-//             ELSE IF requestedFloor ABOVE OR BELOW currentElevatorFloor AND currentElevatorDirection EQUAL TO direction THEN
-//                 IF BestElevator IS NULL OR BestElevatorCase > 2
-//                     FOR EACH Elevator in ElevatorList
-//                         COMPUTE indexDifference RETURNING BestElevator
-//                         SET BestElevatorCase as 2
-//                     END FOR
-//                 END IF
+function ButtonDown(floor, direction) {
+	this.floor = floor;
+	this.direction = direction;
+}
 
-//             ELSE IF requestedFloor ABOVE OR BELOW currentElevatorFloor AND currentElevatorDirection NOT EQUAL TO direction THEN
-//                 IF BestElevator IS NULL OR BestElevatorCase > 3
-//                     FOR EACH Elevator in ElevatorList
-//                         COMPUTE indexDifference RETURNING BestElevator
-//                         SET BestElevatorCase as 3
-//                     END FOR
-//                 END IF
-//             END IF
-//         END FOR
-//     END IF
-//     SET BestElevator TO selectedElevator
-//     RETURN selectedElevator
-// END SEQUENCE
+function makeButtonDowns(n) {
+	let buttonDownList = new Array(n);
+	for (var i = 0; i < n; ++i) {
+		buttonDownList[i] = new ButtonDown(floor, direction);
+	}
+	return buttonDownList;
+}
+
+var buttonDownList = makeButtonDowns(3);
+
+console.log(buttonDownList);
