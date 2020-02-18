@@ -11,28 +11,31 @@ var floorList = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ];
 var RC = floor.indexOf('0');
 
 // Elevator constructor
-function Elevator(floor, direction, status) {
-	this.floor = floor;
-	this.direction = direction;
-	this.status = status;
+function Elevator(currentFloor, currentDirection, currentStatus) {
+	this.currentFloor = currentFloor;
+	this.currentDirection = currentDirection;
+	this.currentStatus = currentStatus;
 }
 
-let floor = 3;
-let direction = 'up';
-let status = 'idle';
+let currentFloor = 3;
+let currentDirection = 'up';
+let currentStatus = 'idle';
 
 function makeElevators(n) {
-	let elevators = new Array(n);
+	let elevatorList = new Array(n);
 	for (var i = 0; i < n; ++i) {
-		elevators[i] = new Elevator(floor, direction, status);
+		elevatorList[i] = new Elevator(
+			currentFloor,
+			currentDirection,
+			currentStatus
+		);
 	}
-	return elevators;
+	return elevatorList;
 }
 
-var elevators = makeElevators(2);
+var elevatorList = makeElevators(2);
 
-console.log(elevators);
-
+console.log(elevatorList);
 
 function ButtonUp(floor, direction) {
 	this.floor = floor;
@@ -47,7 +50,7 @@ function makeButtonUps(n) {
 	return buttonUpList;
 }
 
-var buttonUpList = makeButtonUps(3);
+var buttonUpList = makeButtonUps(10);
 
 console.log(buttonUpList);
 
@@ -64,6 +67,6 @@ function makeButtonDowns(n) {
 	return buttonDownList;
 }
 
-var buttonDownList = makeButtonDowns(3);
+var buttonDownList = makeButtonDowns(10);
 
 console.log(buttonDownList);
