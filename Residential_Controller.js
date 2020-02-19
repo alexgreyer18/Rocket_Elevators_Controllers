@@ -32,10 +32,7 @@ class Column {
 
 	findElevator(requestedFloor, requestDirection) {
 		column.elevatorList.forEach((elevator) => {
-			if (
-				elevator.currentDirection == 'idle' &&
-				elevator.currentFloor == requestedFloor
-			) {
+			if (elevator.currentDirection == 'idle') {
 				//console.log(elevator.elevatorId + ' is Idle');
 				return elevator;
 			}
@@ -69,6 +66,11 @@ class Column {
 						//This elevator is below the user and going up so its a match
 						console.log('Direction match up');
 						return elevator;
+					} else if (
+						requestDirection === 'down' &&
+						elevator.currentDirection === 'down'
+					) {
+						return elevator;
 					}
 				}
 			}
@@ -96,19 +98,23 @@ class Column {
 		bestElevator.requestList.push(requestedFloor);
 		bestElevator.requestList.sort();
 		//bestElevator.currentDirection = this.currentDirection;
-		let difference = bestElevator.requestList - bestElevator.currentFloor;
-		if (bestElevator.requestList > bestElevator.currentFloor) {
+		if (bestElevator.requestList[0] > bestElevator.currentFloor) {
 			bestElevator.currentDirection = 'up';
-		} else {
-			bestElevator.currentDirection = 'down';
-		}
 
-		// if(requestedFloor){
-		//   bestElevator.currentDirection = 'up';
-		// }
-		// else{
-		//   bestElevator.currentDirection = 'down';
-		// }
+			while (bestElevator.requestList > bestElevator.currentFloor) {
+				console.log(bestElevator.currentFloor);
+				bestElevator.currentFloor = bestElevator.currentFloor + 1;
+
+				// bestElevator.moveUp();
+				bestElevator.requestList.pop();
+			}
+		} else if (bestElevator.requestList[0] < bestElevator.currentFloor) {
+			// else{bestElevator.currentDirection = 'down'}
+			bestElevator.currentDirection = 'down';
+			while (bestElevator.requestList < bestElevator.currentFloor) {
+				bestElevator.currentFloor = bestElevator.currentFloor - 1;
+			}
+		}
 	}
 }
 
@@ -125,7 +131,10 @@ class Elevator {
 		this.requestList = [];
 		this.doors = 'closed';
 	}
-
+	requestFloor(bestElevator, RequestedFloor) {
+		//let bestElevator = column.findElevator(requestedFloor, direction));
+		console.log(column.findElevator(4, 'up'));
+	}
 	// moveElevator(direction, floor){
 	//   move numOfIndexDifference[i];
 	//   bestElevator.requestList.pop(elevator.currentFloor);
@@ -143,19 +152,21 @@ class Button {
 
 //SECTION TESTS
 var column = new Column(10, 2);
+
 //bestElevator.move();
 
 //SCENARIO 1 --- elevator 0 Idle at floor 2 and elevator 1  Idle at floor 6, someone on floor 3 requests up, elevator 0 is expected to be sent.
 //Someone else on 3 requests down. Elevator 1 should be sent.
 
-// column.elevatorList[0].currentFloor = 2;
-// column.elevatorList[0].currentDirection = 'idle';
-// column.elevatorList[1].currentFloor = 6;
-// column.elevatorList[1].currentDirection = 'idle';
+column.elevatorList[0].currentFloor = 2;
+column.elevatorList[0].currentDirection = 'idle';
+column.elevatorList[1].currentFloor = 6;
+column.elevatorList[1].currentDirection = 'idle';
 
-// column.requestElevator(3, 'up');
-// column.requestElevator(3, 'down');
-// console.log(column.elevatorList);
+column.requestElevator(3, 'up');
+column.requestElevator(4, 'up');
+// // column.requestElevator(3, 'down'); leave uncommented for no errors
+console.log(column.elevatorList);
 
 //SCENARIO 2 --- elevator 0 idle at floor 10 and elevator 1 at floor 3 going up, someone is on floor 3 and requests the 2nd floor. Elevator 0 should be sent.
 //Someone on the 10th floor wants to go down. Elevator 1 should be sent.
@@ -178,5 +189,6 @@ var column = new Column(10, 2);
 // column.elevatorList[1].currentDirection = 'idle';
 
 // column.requestElevator(3, 'up');
+// column.requestElevator(5, 'down');
 // column.requestElevator(4, 'down');
 // console.log(column.elevatorList);
