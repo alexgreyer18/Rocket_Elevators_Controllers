@@ -32,39 +32,41 @@ class Column {
 
 	findElevator(requestedFloor, requestDirection) {
 		column.elevatorList.forEach((elevator) => {
-			if (elevator.currentDirection == 'idle') {
-				console.log(elevator.elevatorId + ' is Idle');
+			if (
+				elevator.currentDirection == 'idle' &&
+				elevator.currentFloor == requestedFloor
+			) {
+				//console.log(elevator.elevatorId + ' is Idle');
 				return elevator;
 			}
 
 			if (requestedFloor === elevator.currentFloor) {
-				//The elevator is in the same floor of the client
-				console.log('Same floor');
+				//The elevator is in the same floor of the user
+				console.log('Same floor as user');
 				return elevator;
 			} else {
-				//The elevator is in a diferent floor from the client
-
+				//The elevator is in a diferent floor from the user
 				if (requestedFloor > elevator.currentFloor) {
-					//To check if the client is above floor the elevator
-					console.log('Client above');
+					//To check if the user is above the elevator
+					console.log('User is above ' + elevator.elevatorId);
 
 					if (
 						requestDirection === 'down' &&
 						elevator.currentDirection === 'down'
 					) {
-						//This elevator is above the client and going down so its a match
+						//This elevator is above the user and going down so its a match
 						console.log('Direction match down');
 						return elevator;
 					}
 				} else {
-					//The client is below the elevator
-					console.log('Client below');
+					//The user is below the elevator
+					console.log('User is below ' + elevator.elevatorId);
 
 					if (
 						requestDirection === 'up' &&
 						elevator.currentDirection === 'up'
 					) {
-						//This elevator is below the client and going up so its a match
+						//This elevator is below the user and going up so its a match
 						console.log('Direction match up');
 						return elevator;
 					}
@@ -93,7 +95,20 @@ class Column {
 		let bestElevator = column.findElevator(requestedFloor, direction);
 		bestElevator.requestList.push(requestedFloor);
 		bestElevator.requestList.sort();
-		bestElevator.currentDirection = direction;
+		//bestElevator.currentDirection = this.currentDirection;
+		let difference = bestElevator.requestList - bestElevator.currentFloor;
+		if (bestElevator.requestList > bestElevator.currentFloor) {
+			bestElevator.currentDirection = 'up';
+		} else {
+			bestElevator.currentDirection = 'down';
+		}
+
+		// if(requestedFloor){
+		//   bestElevator.currentDirection = 'up';
+		// }
+		// else{
+		//   bestElevator.currentDirection = 'down';
+		// }
 	}
 }
 
@@ -110,6 +125,11 @@ class Elevator {
 		this.requestList = [];
 		this.doors = 'closed';
 	}
+
+	// moveElevator(direction, floor){
+	//   move numOfIndexDifference[i];
+	//   bestElevator.requestList.pop(elevator.currentFloor);
+	// }
 }
 
 // Button constructor
@@ -123,7 +143,40 @@ class Button {
 
 //SECTION TESTS
 var column = new Column(10, 2);
-// var bestElevator = column.findElevator();
 //bestElevator.move();
-column.requestElevator(3, 'down');
-console.log(column.elevatorList);
+
+//SCENARIO 1 --- elevator 0 Idle at floor 2 and elevator 1  Idle at floor 6, someone on floor 3 requests up, elevator 0 is expected to be sent.
+//Someone else on 3 requests down. Elevator 1 should be sent.
+
+// column.elevatorList[0].currentFloor = 2;
+// column.elevatorList[0].currentDirection = 'idle';
+// column.elevatorList[1].currentFloor = 6;
+// column.elevatorList[1].currentDirection = 'idle';
+
+// column.requestElevator(3, 'up');
+// column.requestElevator(3, 'down');
+// console.log(column.elevatorList);
+
+//SCENARIO 2 --- elevator 0 idle at floor 10 and elevator 1 at floor 3 going up, someone is on floor 3 and requests the 2nd floor. Elevator 0 should be sent.
+//Someone on the 10th floor wants to go down. Elevator 1 should be sent.
+
+// column.elevatorList[0].currentFloor = 10;
+// column.elevatorList[0].currentDirection = 'idle';
+// column.elevatorList[1].currentFloor = 3;
+// column.elevatorList[1].currentDirection = 'idle';
+
+// column.requestElevator(3, 'down');
+// column.requestElevator(10, 'down');
+// console.log(column.elevatorList);
+
+//SCENARIO 3 --- elevator 0 Idle at floor 2 and elevator 1 Idle at floor 6, someone on floor 3 requests up, elevator 0 is expected to be sent.
+//Someone on floor 4 requests down.
+
+// column.elevatorList[0].currentFloor = 2;
+// column.elevatorList[0].currentDirection = 'idle';
+// column.elevatorList[1].currentFloor = 6;
+// column.elevatorList[1].currentDirection = 'idle';
+
+// column.requestElevator(3, 'up');
+// column.requestElevator(4, 'down');
+// console.log(column.elevatorList);
