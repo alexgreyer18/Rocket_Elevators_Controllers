@@ -1,93 +1,172 @@
-def main():
-  controller = Controller(2,10)
-  elevator = Elevator(10,2)
-  controller.move(elevator.direction,elevator.elevatorNumber[1])
+class Column():
+    def __init__(self, nbFloor, nbElevator):
+        self.floorList = []
+        for i in range(nbFloor):
+            self.floorList.append(i)
+        print(self.floorList)
 
-class Controller():
-  def __init__(self,elevator,floor):
-    self.elevator = elevator
-    self.floor = floor
-    self.direction = "up"
+        self.elevatorList = []
+        for i in range(nbElevator):
+            elevatorStr = "elevator" + str(i)
+            self.elevatorList.append(Elevator(elevatorStr, 10))
+        # print(self.elevatorList)
 
-    
-  def move(self,direction, elevator):
-    print("elevator: ", elevator)
-    print("Moving :", direction)
+    def findElevator(self, requestedFloor, requestDirection):
+        for elevator in column.elevatorList:
+            # print('list',self.elevatorList)
+            if elevator.currentDirection == 'idle':
+                return elevator
 
+            if requestedFloor == elevator.currentFloor:
+                return elevator
+
+            else:
+
+                if requestedFloor > elevator.currentFloor:
+                    if requestDirection == 'down' and elevator.currentDirection == 'down':
+                        return elevator
+
+                else:
+                    if requestDirection == 'up' and elevator.currentDirection == 'up':
+                        return elevator
+
+                    elif requestDirection == 'down' and elevator.currentDirection == 'down':
+                        return elevator
+
+        BestElevator = None
+        for i in elevatorList:
+
+            if BestElevator == None:
+                BestElevator = elevator
+
+            else:
+
+                if BestElevator.requestList.length > elevator.requestList.length:
+                    BestElevator = elevator
+        return BestElevator
+
+    def requestElevator(self, requestedFloor, direction):
+        bestElevator = self.findElevator(requestedFloor, direction)
+        # print(bestElevator)
+        bestElevator.requestList.append(requestedFloor)
+        bestElevator.requestList.sort()
+        print(str(bestElevator.elevatorId) +
+              ' IS ON FLOOR ' + str(bestElevator.currentFloor))
+
+        if bestElevator.requestList[0] > bestElevator.currentFloor:
+            bestElevator.currentDirection = 'up'
+
+            if bestElevator.requestList != None:
+                while bestElevator.requestList[0] > bestElevator.currentFloor:
+                    bestElevator.currentFloor = bestElevator.currentFloor + 1
+                    print(str(bestElevator.elevatorId) +
+                          ' IS ON FLOOR ' + str(bestElevator.currentFloor))
+
+                    if bestElevator.currentFloor == bestElevator.requestList:
+                        for timer in range(7, 0, -1):
+                            if timer == 0 or timer == 8:
+                                bestElevator.doors = 'Doors are closed'
+                                print(bestElevator.doors)
+                            else:
+                                print('Doors open - ' + str(timer) +
+                                      's until doors close')
+                print('Request popped')
+                bestElevator.requestList.pop()
+        else:
+            bestElevator.currentDirection = 'down'
+            while bestElevator.requestList < bestElevator.currentFloor:
+                bestElevator.currentFloor = bestElevator.currentFloor - 1
+                print(str(bestElevator.elevatorId) +
+                      ' IS ON FLOOR ' + str(bestElevator.currentFloor))
+
+                if bestElevator.currentFloor == bestElevator.requestList:
+                    for timer in range(7, 0, -1):
+                        if timer == 0 or timer == 8:
+                            bestElevator.doors = 'Doors are closed'
+                            print(bestElevator.doors)
+                        else:
+                            print('Doors open - ' + timer +
+                                  's until doors close')
+        print('----  Just a poorly made breakline  ----')
+
+    def requestFloor(self, requestedFloor, direction):
+        elevatorList = self.elevatorList
+        elevators = self.findElevator(requestedFloor, direction)
+        elevators.requestList.append(requestedFloor)
+        elevators.requestList.sort()
+        print(str(elevators.elevatorId) +
+              ' IS ON FLOOR ' + str(elevators.currentFloor))
+
+        if elevators.requestList[0] > elevators.currentFloor:
+            elevators.currentDirection = 'up'
+            if elevators.requestList != None:
+                while elevators.requestList[0] > elevators.currentFloor:
+                    elevators.currentFloor = elevators.currentFloor + 1
+                    print(str(elevators.elevatorId) +
+                          ' IS ON FLOOR ' + str(elevators.currentFloor))
+
+                    if elevators.currentFloor == elevators.requestList:
+                        for timer in range(7, 0, -1):
+                            if timer == 0 or timer == 8:
+                                bestElevator.doors = 'Doors are closed'
+                                print(bestElevator.doors)
+                            else:
+                                print('Doors open - ' + timer +
+                                      's until doors close')
+                print('Request popped')
+                elevators.requestList.pop()
+        else:
+            elevators.currentDirection = 'down'
+            while elevators.requestList < elevators.currentFloor:
+                elevators.currentFloor = elevators.currentFloor - 1
+                print(elevators.elevatorId +
+                      ' IS ON FLOOR ' + elevators.currentFloor)
+
+                if elevators.currentFloor == elevators.requestList:
+                    for timer in range(7, 0, -1):
+                        if timer == 0 or timer == 8:
+                            bestElevator.doors = 'Doors are closed'
+                            print(bestElevator.doors)
+                        else:
+                            print('Doors open - ' + timer +
+                                  's until doors close')
+        print('----  Just a poorly made breakline  ----')
 
 
 class Elevator():
-  def __init__(self,floorTotal,elevatorNumber):
-    self.elevatorNumber = []
-    self.floorTotal = []
-    self.currentFloor = 1
-    self.status = "idle"
-    self.direction = "Up"  
-
-    for i in range(floorTotal):
-        self.floorTotal.append(i)
-    print(self.floorTotal)  
-
-    for i in range(elevatorNumber):
-        self.elevatorNumber.append(i)
-    print(self.elevatorNumber)
+    def __init__(self, elevatorId, nbFloor):
+        self.elevatorId = elevatorId
+        self.currentFloor = 1
+        self.currentDirection = 'idle'
+        self.requestList = []
+        self.doors = 'Elevator doors are closed'
 
 
-main()
+# SECTION TESTS
+print('Uncomment to perform tests')
+# Unfortunately my program falls appart when there's more than one request at a time. How it fails: elevator0 will pick up first request and carry them to destination, then pick up second request, but elevator1 will move to the requested floor instead.
 
+# SCENARIO
 
-{
-    UP = 1
-    DOWN = 2
-    FLOOR_COUNT = 10
-    Elevators = 2
+# # First n is numOfFloors & second n is numOfElevators
+column = Column(10, 2)
 
-        def __init__(self):
-            # Feel free to add any instance variables you want.
-            self.destination_floor = None
-            self.callbacks = None
+# # Elevator 0 Idle at floor 2 and elevator 1  Idle at floor 6
+# column.elevatorList[0].currentDirection = 'idle'
+# column.elevatorList[0].currentFloor = 2
+# column.elevatorList[1].currentDirection = 'idle'
+# column.elevatorList[1].currentFloor = 6
 
-        def on_called(self, floor, direction):
-            """
-            This is called when somebody presses the up or down button to call the elevator.
-            This could happen at any time, whether or not the elevator is moving.
-            The elevator could be requested at any floor at any time, going in either direction.
-            floor: the floor that the elevator is being called to
-            direction: the direction the caller wants to go, up or down
-            """
-            self.destination_floor = floor
+# Test 1
 
-        def on_floor_selected(self, floor):
-            """
-            This is called when somebody on the elevator chooses a floor.
-            This could happen at any time, whether or not the elevator is moving.
-            Any floor could be requested at any time.
-            floor: the floor that was requested
-            """
-            self.destination_floor = floor
+column.requestElevator(3, 'up')
+column.requestFloor(7, 'up')
+# # column.requestElevator(3, 'down')
+# # column.requestFloor(1)
 
-        def on_floor_changed(self):
-            """
-            This lets you know that the elevator has moved one floor up or down.
-            You should decide whether or not you want to stop the elevator.
-            """
-            if self.destination_floor == self.callbacks.current_floor:
-                self.callbacks.motor_direction = None
+# Test 2
 
-        def on_ready(self):
-            """
-            This is called when the elevator is ready to go.
-            Maybe passengers have embarked and disembarked. The doors are closed,
-            time to actually move, if necessary.
-            """
-            if self.destination_floor > self.callbacks.current_floor:
-                self.callbacks.motor_direction = UP
-            elif self.destination_floor < self.callbacks.current_floor:
-                self.callbacks.motor_direction = DOWN
-}
-
-Méthode 1: RequestElevator(RequestedFloor, Direction)
-La méthode 1 doit obligatoirement retourner l’ascenseur choisi et faire bouger les ascenseurs dans son traitement.
-
-Méthode 2: RequestFloor(Elevator, RequestedFloor)
-La méthode 2 doit obligatoirement faire bouger les ascenseurs dans son traitement. 
+# column.requestElevator(7, 'up')
+# column.requestFloor(10)
+# # column.requestElevator(7, 'down')
+# # column.requestFloor(4)
