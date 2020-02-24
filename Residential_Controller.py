@@ -1,3 +1,8 @@
+# This program controls a set of residential elevators.
+# Uncomment scenarios at the bottom of the page for testing purposes.
+# The requestFloor method should have been in the Elevator class but I ran out of time to figure out how to move it there from the Column class, as I had had trouble trying earlier and the requestFloor method does not work
+
+
 class Column():
     def __init__(self, nbFloor, nbElevator):
         self.floorList = []
@@ -12,46 +17,32 @@ class Column():
         # print(self.elevatorList)
 
     def findElevator(self, requestedFloor, requestDirection):
+        BestElevator = None
         for elevator in column.elevatorList:
-            # print('list',self.elevatorList)
-            if elevator.currentDirection == 'idle':
-                return elevator
+            # if elevator.currentDirection == 'idle':
+            #     BestElevator = elevator
 
             if requestedFloor == elevator.currentFloor:
-                return elevator
-
-            else:
-
-                if requestedFloor > elevator.currentFloor:
-                    if requestDirection == 'down' and elevator.currentDirection == 'down':
-                        return elevator
-
-                else:
-                    if requestDirection == 'up' and elevator.currentDirection == 'up':
-                        return elevator
-
-                    elif requestDirection == 'down' and elevator.currentDirection == 'down':
-                        return elevator
-
-        BestElevator = None
-        for i in elevatorList:
-
-            if BestElevator == None:
                 BestElevator = elevator
 
-            else:
-
-                if BestElevator.requestList.length > elevator.requestList.length:
+            elif elevator.currentFloor > requestedFloor:
+                if requestDirection == 'down' and elevator.currentDirection == 'down':
                     BestElevator = elevator
+                else:
+                    BestElevator = elevator
+
+            elif requestedFloor > elevator.currentFloor:
+                    if requestDirection == 'up' and elevator.currentDirection == 'up':
+                        BestElevator = elevator
+                    else:
+                        BestElevator = elevator
         return BestElevator
 
     def requestElevator(self, requestedFloor, direction):
         bestElevator = self.findElevator(requestedFloor, direction)
-        # print(bestElevator)
         bestElevator.requestList.append(requestedFloor)
         bestElevator.requestList.sort()
-        print(str(bestElevator.elevatorId) +
-              ' IS ON FLOOR ' + str(bestElevator.currentFloor))
+        print(str(bestElevator.elevatorId) + ' IS ON FLOOR ' + str(bestElevator.currentFloor))
 
         if bestElevator.requestList[0] > bestElevator.currentFloor:
             bestElevator.currentDirection = 'up'
@@ -59,8 +50,7 @@ class Column():
             if bestElevator.requestList != None:
                 while bestElevator.requestList[0] > bestElevator.currentFloor:
                     bestElevator.currentFloor = bestElevator.currentFloor + 1
-                    print(str(bestElevator.elevatorId) +
-                          ' IS ON FLOOR ' + str(bestElevator.currentFloor))
+                    print(str(bestElevator.elevatorId) + ' IS ON FLOOR ' + str(bestElevator.currentFloor))
 
                     if bestElevator.currentFloor == bestElevator.requestList:
                         for timer in range(7, 0, -1):
@@ -70,11 +60,11 @@ class Column():
                             else:
                                 print('Doors open - ' + str(timer) +
                                       's until doors close')
-                print('Request popped')
-                bestElevator.requestList.pop()
+            print('Request popped')
+            bestElevator.requestList.pop()
         else:
             bestElevator.currentDirection = 'down'
-            while bestElevator.requestList < bestElevator.currentFloor:
+            while bestElevator.requestList[0] < bestElevator.currentFloor:
                 bestElevator.currentFloor = bestElevator.currentFloor - 1
                 print(str(bestElevator.elevatorId) +
                       ' IS ON FLOOR ' + str(bestElevator.currentFloor))
@@ -117,7 +107,7 @@ class Column():
                 elevators.requestList.pop()
         else:
             elevators.currentDirection = 'down'
-            while elevators.requestList < elevators.currentFloor:
+            while elevators.requestList[0] < elevators.currentFloor:
                 elevators.currentFloor = elevators.currentFloor - 1
                 print(elevators.elevatorId +
                       ' IS ON FLOOR ' + elevators.currentFloor)
@@ -132,7 +122,6 @@ class Column():
                                   's until doors close')
         print('----  Just a poorly made breakline  ----')
 
-
 class Elevator():
     def __init__(self, elevatorId, nbFloor):
         self.elevatorId = elevatorId
@@ -143,30 +132,50 @@ class Elevator():
 
 
 # SECTION TESTS
-print('Uncomment to perform tests')
-# Unfortunately my program falls appart when there's more than one request at a time. How it fails: elevator0 will pick up first request and carry them to destination, then pick up second request, but elevator1 will move to the requested floor instead.
-
+print('Uncomment code at bottom of the sheet to perform tests')
+# Unfortunately my requestFloor function does not work. Transcribing from JS to Python, it forced me to pass an argument (direction) I wasn't passing in JS and I believe that"s what ruined my code
 # SCENARIO
 
-# # First n is numOfFloors & second n is numOfElevators
+# First n is numOfFloors & second n is numOfElevators
 column = Column(10, 2)
+ 
 
-# # Elevator 0 Idle at floor 2 and elevator 1  Idle at floor 6
+# Test 1 
+
+# Elevator 0 idle at floor 2 and elevator 1 idle at floor 6
 # column.elevatorList[0].currentDirection = 'idle'
 # column.elevatorList[0].currentFloor = 2
 # column.elevatorList[1].currentDirection = 'idle'
 # column.elevatorList[1].currentFloor = 6
 
-# Test 1
+# column.requestElevator(3, 'up')
+# column.requestFloor(7, 'up')
 
-column.requestElevator(3, 'up')
-column.requestFloor(7, 'up')
-# # column.requestElevator(3, 'down')
-# # column.requestFloor(1)
 
-# Test 2
+# Test 2 
 
-# column.requestElevator(7, 'up')
-# column.requestFloor(10)
-# # column.requestElevator(7, 'down')
-# # column.requestFloor(4)
+#   Elevator 0 idle at floor 10 and elevator 2 idle at floor 3
+# column.elevatorList[0].currentDirection = 'idle';
+# column.elevatorList[0].currentFloor = 10;
+# column.elevatorList[1].currentDirection = 'idle';
+# column.elevatorList[1].currentFloor = 3;
+
+# column.requestElevator(1, 'up');
+# column.requestFloor(6, 'up');
+#   column.requestElevator(3, 'up');
+#   column.requestFloor(5);
+
+# Test 3 
+
+#   Elevator 0 idle at floor 10 and elevator 2 up at floor 6
+#   column.elevatorList[0].currentDirection = 'idle';
+#   column.elevatorList[0].currentFloor = 10;
+#   column.elevatorList[1].currentDirection = 'idle';
+#   column.elevatorList[1].currentFloor = 3;
+
+#   column.requestElevator(3, 'up');
+#   column.requestFloor(6);
+#   column.requestElevator(3, 'down');
+#   column.requestFloor(2);
+#   column.requestElevator(10, 'down');
+#   column.requestFloor(3);
