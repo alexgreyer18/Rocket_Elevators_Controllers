@@ -5,8 +5,34 @@ namespace Commercial_Controller.cs
 {
   public class Columns
   {
+  //   private string elevatorId;
+  //   private Int32 currentFloor = 1;
+  //   private string currentDirection = "idle";
+
+  //   public Elevator(string elevatorId)
+  //   {
+  //     this.elevatorId = elevatorId;
+  //     this.currentFloor = currentFloor;
+  //     this.currentDirection = currentDirection;
+  //   }
+
+  //   public string ElevatorId
+  //   {
+  //     get { return elevatorId;  }
+  //     set { elevatorId = value; }
+  //   }
     
-  }
+  //   public int CurrentFloor
+  //   {
+  //     get { return currentFloor; }
+  //     set { currentFloor = value; }
+  //   }
+  //   public string CurrentDirection
+  //   {
+  //     get { return currentDirection; }
+  //     set { currentDirection = value; }
+  //   }
+  // }
   public class Elevator
   {
     private string elevatorId;
@@ -44,7 +70,7 @@ namespace Commercial_Controller.cs
       {
         Console.WriteLine("Hello World!");
 
-        Int32[] floorList = {9, 8, 7};
+        Int32[] floorList = {66};
         for (int i = 0; i < floorList.Length; i++)
         {
           Console.WriteLine(floorList[i]);
@@ -79,8 +105,24 @@ namespace Commercial_Controller.cs
           Console.WriteLine("Elevator: {0},{1},{2}", elevator.ElevatorId, elevator.CurrentFloor, elevator.CurrentDirection);
         }
         
-        int[] nums = new int[10];
-        Console.WriteLine(nums.Length);
+        int[] numfloor = new int[66];
+        for (int i = 1; i < numfloor.Length; i++)
+        {
+          numfloor[i-1] = i;
+          Console.WriteLine(numfloor[i-1]);
+        }
+
+        // for (int i = 0; i < numfloor.Length; i++)
+        // {
+           
+        // }
+        // foreach (var item in numfloor)
+        // {
+        //   Console.WriteLine(numfloor);
+        //   numfloor.Add(item);
+        //   Console.WriteLine(numfloor);
+        // }
+        Console.WriteLine(numfloor.Length);
           // var battery = new Battery(66, 4);
           
       }
