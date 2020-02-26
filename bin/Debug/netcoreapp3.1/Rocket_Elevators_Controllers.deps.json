@@ -6,15 +6,15 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v3.1": {
-      "Commercial_Controller.cs/1.0.0": {
+      "Rocket_Elevators_Controllers/1.0.0": {
         "runtime": {
-          "Commercial_Controller.cs.dll": {}
+          "Rocket_Elevators_Controllers.dll": {}
         }
       }
     }
   },
   "libraries": {
-    "Commercial_Controller.cs/1.0.0": {
+    "Rocket_Elevators_Controllers/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
