@@ -14,12 +14,19 @@ namespace Rocket_Elevators_Controllers
         {
             this.numColumns = numColumns;
 
+           
+            int[] servicedFloors = {1, 2, 3};
+
             columns = new List<Column>();
             for (int i = 0; i < numColumns; i++)
             {
-                Column column = new Column(i + 1, 66, numElevators);
+                if(i == 1)
+                {
+                    servicedFloors = 
+                }
+                Column column = new Column(i + 1, 66, numElevators, servicedFloors);
                 columns.Add(column);
-                Console.WriteLine("column" + columns[i].col_Id + "\n");
+                Console.WriteLine("column" + columns[i].col_Id + columns[i].servicedFloors + "\n");
             }
         }
     }
@@ -29,23 +36,23 @@ namespace Rocket_Elevators_Controllers
         public int col_Id;
         public int numElevators;
         public int numFloor;
-
+        public int[] servicedFloors = {1, 2, 3};
         public List<Elevator> elevators;
 
-        public Column(int col_Id, int numFloor, int numElevators)
+        public Column(int col_Id, int numFloor, int numElevators, int[] servicedFloors)
         {
             this.col_Id = col_Id;
             this.numElevators = numElevators;
             this.numFloor = numFloor;
+            this.servicedFloors = servicedFloors;
 
             elevators = new List<Elevator>();
-
+            
             for (int i = 0; i < numElevators; i++)
             {
-                Elevator elevator = new Elevator(i + 1, 1);
+                Elevator elevator = new Elevator(i + 1);
                 elevators.Add(elevator);
-
-                Console.WriteLine("elevator" + elevators[i].elev_Id + " on floor : " + elevators[i].currentFloor);
+                Console.WriteLine("Elevator{0},{1},{2}", " " + elevator.elev_Id, " on floor" + elevator.currentFloor, " " +  elevator.currentDirection);
 
                 // if (i <= 5)
                 // {
@@ -74,10 +81,9 @@ namespace Rocket_Elevators_Controllers
         public int currentFloor = 1;
         public string currentDirection = "idle";
 
-        public Elevator(int elev_Id, int currentFloor)
+        public Elevator(int elev_Id)
         {
             this.elev_Id = elev_Id;
-            this.currentFloor = currentFloor;
         }
 
     }
