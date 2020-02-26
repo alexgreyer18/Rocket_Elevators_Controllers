@@ -9,24 +9,25 @@ namespace Rocket_Elevators_Controllers
         public int numColumns;
 
         public List<Column> columns;
-
+            int[] servFloors1 = new int[]{-6, -5, -4, -3, -2, -1, 0};
+            int[] servFloors2 = new int[5]{0, 2, 3, 4, 5};
+            // servFloors2[0] = 0;
+            // servFloors2[1] = 2;
+            // servFloors2[2] = 3;
+            // servFloors2[3] = 4;
+            // servFloors2[4] = 5;
+            int[] servFloors3 = new int[]{0, 2, 3, 4, 5};
+            int[] servFloors4 = new int[]{0, 2, 3, 4, 5};
         public Battery(int numColumns, int numElevators)
         {
             this.numColumns = numColumns;
 
-           
-            int[] servicedFloors = {1, 2, 3};
-
             columns = new List<Column>();
             for (int i = 0; i < numColumns; i++)
             {
-                if(i == 1)
-                {
-                    servicedFloors = 
-                }
-                Column column = new Column(i + 1, 66, numElevators, servicedFloors);
+                Column column = new Column(i + 1, 66, numElevators, servFloors2);
                 columns.Add(column);
-                Console.WriteLine("column" + columns[i].col_Id + columns[i].servicedFloors + "\n");
+                Console.WriteLine("column" + columns[i].col_Id + " servicing floors : " +  columns[i].servicedFloors + "\n");
             }
         }
     }
@@ -36,7 +37,7 @@ namespace Rocket_Elevators_Controllers
         public int col_Id;
         public int numElevators;
         public int numFloor;
-        public int[] servicedFloors = {1, 2, 3};
+        public int[] servicedFloors;
         public List<Elevator> elevators;
 
         public Column(int col_Id, int numFloor, int numElevators, int[] servicedFloors)
@@ -52,7 +53,7 @@ namespace Rocket_Elevators_Controllers
             {
                 Elevator elevator = new Elevator(i + 1);
                 elevators.Add(elevator);
-                Console.WriteLine("Elevator{0},{1},{2}", " " + elevator.elev_Id, " on floor" + elevator.currentFloor, " " +  elevator.currentDirection);
+                Console.WriteLine("Elevator{0},{1},{2}", elevator.elev_Id, " on floor" + elevator.currentFloor, " " +  elevator.currentDirection);
 
                 // if (i <= 5)
                 // {
