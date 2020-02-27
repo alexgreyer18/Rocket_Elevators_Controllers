@@ -31,17 +31,17 @@ namespace Rocket_Elevators_Controllers
                 }
                 else if (i == 1)
                 {
-                    Column column = new Column("C2_column", 66, numElevators, servFloorsList[i]);
+                    Column column = new Column("C1_column", 66, numElevators, servFloorsList[i]);
                     columns.Add(column);
                 }
                 else if (i == 2)
                 {
-                    Column column = new Column("C3_column", 66, numElevators, servFloorsList[i]);
+                    Column column = new Column("C2_column", 66, numElevators, servFloorsList[i]);
                     columns.Add(column);
                 }
                 else if (i == 3)
                 {
-                    Column column = new Column("C4_column", 66, numElevators, servFloorsList[i]);
+                    Column column = new Column("C3_column", 66, numElevators, servFloorsList[i]);
                     columns.Add(column);
                 }
 
@@ -58,45 +58,39 @@ namespace Rocket_Elevators_Controllers
             //     System.Console.WriteLine(item.col_Id);
             // }
         }
-        //public Column
-        public void findColumn(int reqFloor)
+        public Column findColumn(int reqFloor)
         {
             System.Console.WriteLine("floor " + reqFloor + " was requested");
             int ReqFloor = reqFloor;
+            Column bestColumn = columns[0];
             foreach (var column in columns)
             {
-                // System.Console.WriteLine(columns[1].col_Id + "hello ma honey");
-                if (ReqFloor == 0)
+                if (ReqFloor < 0)
                 {
-                    Column BestColumn = column;
-                    // return BestColumn;
-                    System.Console.WriteLine("Lobby requested");
-                }
-                else if (ReqFloor < 0)
-                {
+                    bestColumn = columns[0];
                     System.Console.WriteLine(columns[0].col_Id + " was selected");
-                    System.Console.WriteLine("basements was selected");
+                    return bestColumn;
                 }
                 else if (ReqFloor > 0 & ReqFloor <= 20)
                 {
+                    bestColumn = columns[1];
                     System.Console.WriteLine(columns[1].col_Id + " was selected");
-                    System.Console.WriteLine("col1 was selected");
+                    return bestColumn;
                 }
                 else if (ReqFloor >= 21 & ReqFloor <= 40)
                 {
+                    bestColumn = columns[2];
                     System.Console.WriteLine(columns[2].col_Id + " was selected");
-                    System.Console.WriteLine("col2 was selected");
+                    return bestColumn;
                 }
                 else if (ReqFloor >= 41 & ReqFloor <= 60)
                 {
+                    bestColumn = columns[3];
                     System.Console.WriteLine(columns[3].col_Id + " was selected");
+                    return bestColumn;
                 }
             }
-
-            // foreach (var item in columns)
-            // {
-            //     System.Console.WriteLine(item.col_Id);
-            // }
+            return bestColumn;
         }
     }
 
@@ -128,7 +122,13 @@ namespace Rocket_Elevators_Controllers
                 Console.WriteLine("{0},{1},{2}", elevator.elev_Id, " on floor" + elevator.currentFloor, " " + elevator.currentDirection);
             }
         }
+        public static void findElevator(Column bestColumn, int reqFloor)
+        {
+            foreach (var elevator in elevators)
+            {
 
+            }
+        }
     }
 
     public class Elevator
@@ -148,12 +148,7 @@ namespace Rocket_Elevators_Controllers
         {
             var battery = new Battery(4, 5);
             // Console.WriteLine(battery);
-            battery.findColumn(45);
-        }
-
-        public static void findColumn()
-        {
-            Console.WriteLine("Hello");
+            battery.findColumn(8);
         }
     }
 }

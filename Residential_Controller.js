@@ -8,7 +8,7 @@ class Column {
 		this.floorList = [];
 		// start elevator list at 1 if there's no basements
 		for (let i = 1; i <= nbFloor; i++) {
-			this.floorList.push([ i ]);
+			this.floorList.push([i]);
 		}
 
 		this.elevatorList = [];
@@ -66,8 +66,8 @@ class Column {
 		bestElevator.requestList.sort();
 		console.log(
 			bestElevator.elevatorId +
-				' IS ON FLOOR ' +
-				bestElevator.currentFloor
+			' IS ON FLOOR ' +
+			bestElevator.currentFloor
 		);
 		if (bestElevator.requestList[0] > bestElevator.currentFloor) {
 			bestElevator.currentDirection = 'up';
@@ -77,8 +77,8 @@ class Column {
 					bestElevator.currentFloor = bestElevator.currentFloor + 1;
 					console.log(
 						bestElevator.elevatorId +
-							' IS ON FLOOR ' +
-							bestElevator.currentFloor
+						' IS ON FLOOR ' +
+						bestElevator.currentFloor
 					);
 
 					if (bestElevator.currentFloor == bestElevator.requestList) {
@@ -89,8 +89,8 @@ class Column {
 							} else {
 								console.log(
 									'Doors open - ' +
-										timer +
-										's until doors close'
+									timer +
+									's until doors close'
 								);
 							}
 						}
@@ -105,8 +105,8 @@ class Column {
 				bestElevator.currentFloor = bestElevator.currentFloor - 1;
 				console.log(
 					bestElevator.elevatorId +
-						' IS ON FLOOR ' +
-						bestElevator.currentFloor
+					' IS ON FLOOR ' +
+					bestElevator.currentFloor
 				);
 				if (bestElevator.currentFloor == bestElevator.requestList) {
 					for (let timer = 8; timer >= 0; timer--) {
@@ -143,8 +143,8 @@ class Column {
 					elevators.currentFloor = elevators.currentFloor + 1;
 					console.log(
 						elevators.elevatorId +
-							' IS ON FLOOR ' +
-							elevators.currentFloor
+						' IS ON FLOOR ' +
+						elevators.currentFloor
 					);
 
 					if (elevators.currentFloor == elevators.requestList) {
@@ -156,8 +156,8 @@ class Column {
 								// elevators.doors = 'Doors are open';
 								console.log(
 									'Doors open - ' +
-										timer +
-										's until doors close'
+									timer +
+									's until doors close'
 								);
 							}
 						}
@@ -172,8 +172,8 @@ class Column {
 				elevators.currentFloor = elevators.currentFloor - 1;
 				console.log(
 					elevators.elevatorId +
-						' IS ON FLOOR ' +
-						elevators.currentFloor
+					' IS ON FLOOR ' +
+					elevators.currentFloor
 				);
 
 				if (elevators.currentFloor == elevators.requestList) {
