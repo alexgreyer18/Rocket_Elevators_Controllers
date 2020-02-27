@@ -58,9 +58,7 @@ class Column {
 	}
 
 	requestElevator(requestedFloor, requestDirection) {
-		let bestElevator = column.findElevator(
-			requestedFloor,
-			requestDirection
+		let bestElevator = column.findElevator(requestedFloor, requestDirection
 		);
 		bestElevator.requestList.push(requestedFloor);
 		bestElevator.requestList.sort();
