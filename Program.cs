@@ -15,37 +15,43 @@ namespace Rocket_Elevators_Controllers
         public static int[] servFloors4 = new int[21] { 0, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60 };
 
         List<int[]> servFloorsList = new List<int[]> { servFloors1, servFloors2, servFloors3, servFloors4 };
-
+        public static string[] numCagesPerCol = new string[5] { "elev_1", "elev_2", "elev_3", "elev_4", "elev_5"};
+        public Column bestColumn;
         public Battery(int numColumns, int numElevators)
         {
             this.numColumns = numColumns;
+            this.bestColumn = bestColumn;
 
             columns = new List<Column>();
 
+            // To change amount of cages per column
+            // int numCagesPerCol = 5;
+
+            // Initializing columns list with unique ID
             for (int i = 0; i < numColumns; i++)
             {
                 if (i == 0)
                 {
-                    Column column = new Column("B1_column", 66, numElevators, servFloorsList[i]);
+                    Column column = new Column("B1_column", 66, numCagesPerCol, servFloorsList[i]);
                     columns.Add(column);
                 }
                 else if (i == 1)
                 {
-                    Column column = new Column("C1_column", 66, numElevators, servFloorsList[i]);
+                    Column column = new Column("C1_column", 66, numCagesPerCol, servFloorsList[i]);
                     columns.Add(column);
                 }
                 else if (i == 2)
                 {
-                    Column column = new Column("C2_column", 66, numElevators, servFloorsList[i]);
+                    Column column = new Column("C2_column", 66, numCagesPerCol, servFloorsList[i]);
                     columns.Add(column);
                 }
                 else if (i == 3)
                 {
-                    Column column = new Column("C3_column", 66, numElevators, servFloorsList[i]);
+                    Column column = new Column("C3_column", 66, numCagesPerCol, servFloorsList[i]);
                     columns.Add(column);
                 }
-
-                Console.WriteLine("{0},{1}", columns[i].col_Id, " servicing floors : " + String.Join(", ", columns[i].servicedFloors));
+                System.Console.WriteLine(bestColumn);
+                Console.WriteLine(columns[i].col_Id + "\n" + "Servicing floors : " + String.Join(", ", columns[i].servicedFloors)  + "\n" + "With elevators : " + String.Join(", ", columns[i].numCagesPerCol));
                 Console.WriteLine("____________________________________________________");
                 // foreach (var item in servFloors1)
                 // {
@@ -58,37 +64,48 @@ namespace Rocket_Elevators_Controllers
             //     System.Console.WriteLine(item.col_Id);
             // }
         }
+        
         public Column findColumn(int reqFloor)
         {
             System.Console.WriteLine("floor " + reqFloor + " was requested");
             int ReqFloor = reqFloor;
-            Column bestColumn = columns[0];
+            
             foreach (var column in columns)
             {
-                if (ReqFloor < 0)
+                if(ReqFloor == 0)
+                {
+                    System.Console.WriteLine("You are on selected floor level. Please select another floor.");
+                    break;
+                }
+                else if (ReqFloor < 0)
                 {
                     bestColumn = columns[0];
                     System.Console.WriteLine(columns[0].col_Id + " was selected");
+                    System.Console.WriteLine(bestColumn.col_Id);
                     return bestColumn;
                 }
                 else if (ReqFloor > 0 & ReqFloor <= 20)
                 {
                     bestColumn = columns[1];
                     System.Console.WriteLine(columns[1].col_Id + " was selected");
+                    System.Console.WriteLine(bestColumn.col_Id);
                     return bestColumn;
                 }
                 else if (ReqFloor >= 21 & ReqFloor <= 40)
                 {
                     bestColumn = columns[2];
                     System.Console.WriteLine(columns[2].col_Id + " was selected");
+                    System.Console.WriteLine(bestColumn.col_Id);
                     return bestColumn;
                 }
                 else if (ReqFloor >= 41 & ReqFloor <= 60)
                 {
                     bestColumn = columns[3];
                     System.Console.WriteLine(columns[3].col_Id + " was selected");
+                    System.Console.WriteLine(bestColumn.col_Id);
                     return bestColumn;
                 }
+            return bestColumn;
             }
             return bestColumn;
         }
@@ -97,21 +114,22 @@ namespace Rocket_Elevators_Controllers
 
     public class Column
     {
+        // Column attributes
         public string col_Id;
         public int numElevators;
         public int numFloor;
         public int[] servicedFloors;
-        public List<Elevator> elevators;
+        public string[] numCagesPerCol;
+        public static List<Elevator> elevators;
+        // public Column selectedColumn = bestColumn;
 
-        public Column(string col_Id, int numFloor, int numElevators, int[] servicedFloors)
+        // Column constructor
+        public Column(string col_Id, int numFloor, string[] numCagesPerCol, int[] servicedFloors)
         {
             this.col_Id = col_Id;
-            this.numElevators = numElevators;
+            this.numCagesPerCol = numCagesPerCol;
             this.numFloor = numFloor;
             this.servicedFloors = servicedFloors;
-            // Console.WriteLine("----------------------------");
-            // Console.WriteLine(servicedFloors[1]);
-            // Console.WriteLine("----------------------------");
 
             elevators = new List<Elevator>();
 
@@ -122,13 +140,21 @@ namespace Rocket_Elevators_Controllers
                 Console.WriteLine("{0},{1},{2}", elevator.elev_Id, " on floor" + elevator.currentFloor, " " + elevator.currentDirection);
             }
         }
-        public static void findElevator(Column bestColumn, int reqFloor)
+        
+        public Elevator selectedColumn(Column bestColumn)
         {
-            foreach (var elevator in elevators)
-            {
 
-            }
         }
+        // Methods
+        // public void findElevator(bestColumn)
+        // {
+        //     string selectedBestColumn = bestColumn;
+        //     // System.Console.WriteLine(bestColumn);
+        //     foreach (var elevator in bestColumn)
+        //     {
+        //         System.Console.WriteLine(elevator.elev_Id);
+        //     }
+        // }
     }
 
     public class Elevator
@@ -147,8 +173,11 @@ namespace Rocket_Elevators_Controllers
         static void Main(string[] args)
         {
             var battery = new Battery(4, 5);
+            // var column = new Column(bestColumn);
             // Console.WriteLine(battery);
-            battery.findColumn(8);
+            battery.findColumn(7);
+            // column.findElevator();
+            // bestColumn.findElevator();
         }
     }
 }
