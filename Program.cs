@@ -51,7 +51,6 @@ namespace Rocket_Elevators_Controllers
                 // {
                 //     Console.WriteLine(item.ToString());
                 // }
-
             }
         }
         public Elevator requestElevator(int reqFloor, string reqDirection)
@@ -86,7 +85,44 @@ namespace Rocket_Elevators_Controllers
             }
             System.Console.WriteLine(bestColumn.col_Id + " was selected");
             var elevator = bestColumn.findElevator(reqFloor, reqDirection);
+            return elevator;
+        }
 
+        public static Elevator assignElevator(int reqFloor, string direction)
+        {
+            int hello = 0;
+
+            System.Console.WriteLine(hello);
+            // Column selectedColumn = bestColumn;
+            System.Console.WriteLine("floor " + reqFloor + " was requested");
+            int ReqFloor = reqFloor;
+            Column bestColumn = null;
+            foreach (var column in columns)
+            {
+                if (ReqFloor == 0)
+                {
+                    System.Console.WriteLine("You are on selected floor level. Please select another floor.");
+                    break;
+                }
+                else if (ReqFloor < 0)
+                {
+                    bestColumn = columns[0];
+                }
+                else if (ReqFloor > 0 & ReqFloor <= 20)
+                {
+                    bestColumn = columns[1];
+                }
+                else if (ReqFloor >= 21 & ReqFloor <= 40)
+                {
+                    bestColumn = columns[2];
+                }
+                else if (ReqFloor >= 41 & ReqFloor <= 60)
+                {
+                    bestColumn = columns[3];
+                }
+            }
+            System.Console.WriteLine(bestColumn.col_Id + " was selected");
+            var elevator = bestColumn.findElevator(reqFloor, direction);
             return elevator;
         }
     }
@@ -101,7 +137,6 @@ namespace Rocket_Elevators_Controllers
         public int[] servicedFloors;
         public string[] numCagesPerCol;
         public List<Elevator> elevators;
-        // public Column selectedColumn = bestColumn;
 
         // Column constructor
         public Column(string col_Id, int numFloor, int numElevators, int[] servicedFloors)
@@ -121,7 +156,7 @@ namespace Rocket_Elevators_Controllers
             }
         }
 
-        // Methods
+        // Column Methods
         public Elevator findElevator(int reqFloor, string reqDirection)
         {
             Elevator bestElevator = null;
@@ -147,15 +182,11 @@ namespace Rocket_Elevators_Controllers
                 {
                     System.Console.WriteLine("Loop conditions need more work");
                 }
-
-                // System.Console.WriteLine(reqFloor);
-                // System.Console.WriteLine(bestElevator + "test");
-
             }
             System.Console.WriteLine(bestElevator.elev_Id);
-            // var elevator = bestElevator.operateElevator(reqFloor);
             return bestElevator;
         }
+
     }
 
     public class Elevator
@@ -180,7 +211,6 @@ namespace Rocket_Elevators_Controllers
                     this.currentFloor++;
                 }
                 System.Console.WriteLine("I am " + this.elev_Id + " and I'm on floor " + this.currentFloor);
-
             }
             else
             {
@@ -190,7 +220,6 @@ namespace Rocket_Elevators_Controllers
                     this.currentFloor--;
                 }
                 System.Console.WriteLine("I am " + this.elev_Id + " and I'm on floor " + this.currentFloor);
-
             }
             // Doors opening & closing when it has arrived to pick up the user
             System.Console.WriteLine("Doors opened." + "\n" + "Doors closed.");
@@ -213,11 +242,7 @@ namespace Rocket_Elevators_Controllers
                     this.currentFloor--;
                 }
                 System.Console.WriteLine("I am " + this.elev_Id + " and I'm on floor " + this.currentFloor);
-
             }
-
-
-
         }
     }
 
@@ -231,8 +256,11 @@ namespace Rocket_Elevators_Controllers
             // bestColumn.operateElevator(7);
 
             // Test 2 --- Basement 2 requesting an elevator going to floor 0
-            var bestColumn = battery.requestElevator(-2, "up");
-            bestColumn.operateElevator(-2);
+            // var bestColumn = battery.requestElevator(-2, "up");
+            // bestColumn.operateElevator(-2);
+
+            // Test 3 --- Floor 0 requesting an elevator going to floor 7
+            Battery.assignElevator(-2, "down");
 
             // bestColumn.findElevator(bestColumn, bestColumn.requestElevator);
             // var elevator = bestColumn.findElevator();
