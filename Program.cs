@@ -19,26 +19,26 @@ namespace Rocket_Elevators_Controllers
                 // going to 2nd, and B5 at 6th floor going to 1st, someone is at 1st floor and requests the 20th floor, 
                 // Elevator5 (B5) is expected to be sent
 
-                //     System.Console.WriteLine("__________________Elevator Status'_________________");
-                //     Battery.columns[1].elevators[0].currentFloor = 20;
-                //     Battery.columns[1].elevators[0].currentDirection = "down";
-                //     System.Console.WriteLine(Battery.columns[1].elevators[0].elev_Id + " on floor " + Battery.columns[1].elevators[0].currentFloor + " going " + Battery.columns[1].elevators[0].currentDirection);
+                // System.Console.WriteLine("__________________Elevator Status'_________________");
+                // Battery.columns[1].elevators[0].currentFloor = 20;
+                // Battery.columns[1].elevators[0].currentDirection = "down";
+                // System.Console.WriteLine(Battery.columns[1].elevators[0].elev_Id + " on floor " + Battery.columns[1].elevators[0].currentFloor + " going " + Battery.columns[1].elevators[0].currentDirection);
 
-                //     Battery.columns[1].elevators[1].currentFloor = 3;
-                //     Battery.columns[1].elevators[1].currentDirection = "up";
-                //     System.Console.WriteLine(Battery.columns[1].elevators[1].elev_Id + " on floor " + Battery.columns[1].elevators[1].currentFloor + " going " + Battery.columns[1].elevators[1].currentDirection);
+                // Battery.columns[1].elevators[1].currentFloor = 3;
+                // Battery.columns[1].elevators[1].currentDirection = "up";
+                // System.Console.WriteLine(Battery.columns[1].elevators[1].elev_Id + " on floor " + Battery.columns[1].elevators[1].currentFloor + " going " + Battery.columns[1].elevators[1].currentDirection);
 
-                //     Battery.columns[1].elevators[2].currentFloor = 13;
-                //     Battery.columns[1].elevators[2].currentDirection = "down";
-                //     System.Console.WriteLine(Battery.columns[1].elevators[2].elev_Id + " on floor " + Battery.columns[1].elevators[2].currentFloor + " going " + Battery.columns[1].elevators[2].currentDirection);
+                // Battery.columns[1].elevators[2].currentFloor = 13;
+                // Battery.columns[1].elevators[2].currentDirection = "down";
+                // System.Console.WriteLine(Battery.columns[1].elevators[2].elev_Id + " on floor " + Battery.columns[1].elevators[2].currentFloor + " going " + Battery.columns[1].elevators[2].currentDirection);
 
-                //     Battery.columns[1].elevators[3].currentFloor = 15;
-                //     Battery.columns[1].elevators[3].currentDirection = "down";
-                //     System.Console.WriteLine(Battery.columns[1].elevators[3].elev_Id + " on floor " + Battery.columns[1].elevators[3].currentFloor + " going " + Battery.columns[1].elevators[3].currentDirection);
+                // Battery.columns[1].elevators[3].currentFloor = 15;
+                // Battery.columns[1].elevators[3].currentDirection = "down";
+                // System.Console.WriteLine(Battery.columns[1].elevators[3].elev_Id + " on floor " + Battery.columns[1].elevators[3].currentFloor + " going " + Battery.columns[1].elevators[3].currentDirection);
 
-                //     Battery.columns[1].elevators[4].currentFloor = 6;
-                //     Battery.columns[1].elevators[4].currentDirection = "down";
-                //     System.Console.WriteLine(Battery.columns[1].elevators[4].elev_Id + " on floor " + Battery.columns[1].elevators[4].currentFloor + " going " + Battery.columns[1].elevators[4].currentDirection);
+                // Battery.columns[1].elevators[4].currentFloor = 6;
+                // Battery.columns[1].elevators[4].currentDirection = "down";
+                // System.Console.WriteLine(Battery.columns[1].elevators[4].elev_Id + " on floor " + Battery.columns[1].elevators[4].currentFloor + " going " + Battery.columns[1].elevators[4].currentDirection);
             }
             // Battery.assignElevator(20, "up").operateElevator(20);
 
@@ -52,25 +52,25 @@ namespace Rocket_Elevators_Controllers
                 // going to 24th, and C5 at 39nd floor going to 1st, someone is at 1st floor and requests the 36th floor,
                 // Elevator1 (C1) is expected to be sent
 
-                //     Battery.columns[2].elevators[0].currentFloor = 0;
-                //     Battery.columns[2].elevators[0].currentDirection = "up";
-                //     System.Console.WriteLine(Battery.columns[2].elevators[0].elev_Id + " on floor " + Battery.columns[2].elevators[0].currentFloor + " going " + Battery.columns[2].elevators[0].currentDirection);
+                // Battery.columns[2].elevators[0].currentFloor = 0;
+                // Battery.columns[2].elevators[0].currentDirection = "up";
+                // System.Console.WriteLine(Battery.columns[2].elevators[0].elev_Id + " on floor " + Battery.columns[2].elevators[0].currentFloor + " going " + Battery.columns[2].elevators[0].currentDirection);
 
-                //     Battery.columns[2].elevators[1].currentFloor = 23;
-                //     Battery.columns[2].elevators[1].currentDirection = "up";
-                //     System.Console.WriteLine(Battery.columns[2].elevators[1].elev_Id + " on floor " + Battery.columns[2].elevators[1].currentFloor + " going " + Battery.columns[2].elevators[1].currentDirection);
+                // Battery.columns[2].elevators[1].currentFloor = 23;
+                // Battery.columns[2].elevators[1].currentDirection = "up";
+                // System.Console.WriteLine(Battery.columns[2].elevators[1].elev_Id + " on floor " + Battery.columns[2].elevators[1].currentFloor + " going " + Battery.columns[2].elevators[1].currentDirection);
 
-                //     Battery.columns[2].elevators[2].currentFloor = 33;
-                //     Battery.columns[2].elevators[2].currentDirection = "down";
-                //     System.Console.WriteLine(Battery.columns[2].elevators[2].elev_Id + " on floor " + Battery.columns[2].elevators[2].currentFloor + " going " + Battery.columns[2].elevators[2].currentDirection);
+                // Battery.columns[2].elevators[2].currentFloor = 33;
+                // Battery.columns[2].elevators[2].currentDirection = "down";
+                // System.Console.WriteLine(Battery.columns[2].elevators[2].elev_Id + " on floor " + Battery.columns[2].elevators[2].currentFloor + " going " + Battery.columns[2].elevators[2].currentDirection);
 
-                //     Battery.columns[2].elevators[3].currentFloor = 40;
-                //     Battery.columns[2].elevators[3].currentDirection = "down";
-                //     System.Console.WriteLine(Battery.columns[2].elevators[3].elev_Id + " on floor " + Battery.columns[2].elevators[3].currentFloor + " going " + Battery.columns[2].elevators[3].currentDirection);
+                // Battery.columns[2].elevators[3].currentFloor = 40;
+                // Battery.columns[2].elevators[3].currentDirection = "down";
+                // System.Console.WriteLine(Battery.columns[2].elevators[3].elev_Id + " on floor " + Battery.columns[2].elevators[3].currentFloor + " going " + Battery.columns[2].elevators[3].currentDirection);
 
-                //     Battery.columns[2].elevators[4].currentFloor = 39;
-                //     Battery.columns[2].elevators[4].currentDirection = "down";
-                //     System.Console.WriteLine(Battery.columns[2].elevators[4].elev_Id + " on floor " + Battery.columns[2].elevators[4].currentFloor + " going " + Battery.columns[2].elevators[4].currentDirection);
+                // Battery.columns[2].elevators[4].currentFloor = 39;
+                // Battery.columns[2].elevators[4].currentDirection = "down";
+                // System.Console.WriteLine(Battery.columns[2].elevators[4].elev_Id + " on floor " + Battery.columns[2].elevators[4].currentFloor + " going " + Battery.columns[2].elevators[4].currentDirection);
             }
             // Battery.assignElevator(36, "up").operateElevator(36);
 
@@ -303,21 +303,16 @@ namespace Rocket_Elevators_Controllers
             foreach (var elevator in elevators)
             {
                 //elevatorScores.Add(elevator.currentFloor - reqFloor);
-                Console.WriteLine("dsadsadasdas " + elevator.elev_Id);
+
                 int tmpScore = elevator.currentFloor - reqFloor;
-                Console.WriteLine("elevator.currentFloor " + elevator.currentFloor);
-                Console.WriteLine("reqFloo r" + reqFloor);
-                Console.WriteLine("elevator.currentDirection " + elevator.currentDirection);
-                Console.WriteLine("reqDirection " + reqDirection);
 
                 // var score = elevator.currentFloor - reqFloor;
                 // System.Console.WriteLine(elevator.elev_Id + "'s distance to requested floor is " + score + " floors");
 
                 // If floors are the same
-                if (elevator.currentFloor == reqFloor) // -----------------
+                if (elevator.currentFloor == 0)
                 {
                     System.Console.WriteLine("Console log");
-                    System.Console.WriteLine(elevator.elev_Id);
                     if (tmpScore < bestScore)
                     {
                         bestElevator = elevator;
@@ -328,7 +323,6 @@ namespace Rocket_Elevators_Controllers
                 else if (elevator.currentFloor > reqFloor & elevator.currentDirection == "down" & reqDirection == "down")
                 {
                     System.Console.WriteLine("Console log1");
-                    System.Console.WriteLine(elevator.elev_Id);
                     if (tmpScore < bestScore)
                     {
                         bestElevator = elevator;
@@ -340,7 +334,6 @@ namespace Rocket_Elevators_Controllers
                 else if (elevator.currentFloor > reqFloor & elevator.currentDirection == "up" & reqDirection == "up")
                 {
                     System.Console.WriteLine("Console log2");
-                    System.Console.WriteLine(elevator.elev_Id);
                     if (tmpScore < bestScore)
                     {
                         bestElevator = elevator;
@@ -351,26 +344,23 @@ namespace Rocket_Elevators_Controllers
                 // If elevator is below floor requested & going up
                 else if (elevator.currentFloor < reqFloor) // & elevator.currentDirection == "up" & reqDirection == "up")
                 {
+                    // + " is being sent");
                     System.Console.WriteLine("Console log3");
-                    System.Console.WriteLine(elevator.elev_Id);
-                    Console.WriteLine("tmpScrore " + tmpScore);
-                    Console.WriteLine("bestScrore " + bestScore);
                     if (tmpScore < bestScore)
                     {
                         bestElevator = elevator;
-                        // break;
+
                     }
+                    System.Console.WriteLine(bestElevator.elev_Id);
                 }
 
                 // If elevator is below floor requested elevator & going down
-                else if (elevator.currentFloor < reqFloor & elevator.currentDirection == "up" & reqDirection == "up")
+                else if (elevator.currentFloor < reqFloor & elevator.currentDirection == "down" & reqDirection == "down")
                 {
                     System.Console.WriteLine("Console log4");
-                    System.Console.WriteLine(elevator.elev_Id);
                     if (tmpScore < bestScore)
                     {
                         bestElevator = elevator;
-                        break;
                     }
                 }
                 // else if (reqFloor == 20)
@@ -403,7 +393,6 @@ namespace Rocket_Elevators_Controllers
         public string elev_Id;
         public int currentFloor = 1;
         public string currentDirection = "idle";
-        public int score;
 
         // Elevator constructor
         public Elevator(string elev_Id)
@@ -415,8 +404,7 @@ namespace Rocket_Elevators_Controllers
         // Make the elevator go pick up the user after finding the bestElevator
         public void operateElevator(int reqFloor)
         {
-            Console.WriteLine(reqFloor);
-            Console.WriteLine(this.currentFloor);
+
             if (reqFloor > this.currentFloor)
             {
                 while (this.currentFloor != 0)
