@@ -1,4 +1,7 @@
-﻿using System;
+﻿// This program controls a battery of elevators in a commercial setting with a modern approach.
+// Uncomment scenarios in Main for testing purposes.
+
+using System;
 using System.Linq;
 using System.Collections.Generic;
 
@@ -289,7 +292,6 @@ namespace Rocket_Elevators_Controllers
             {
                 Elevator elevator = new Elevator("Elevator" + (i + 1));
                 elevators.Add(elevator);
-                // Console.WriteLine("{0},{1},{2}", elevator.elev_Id, " on floor" + elevator.currentFloor, " " + elevator.currentDirection);
             }
         }
 
@@ -305,11 +307,13 @@ namespace Rocket_Elevators_Controllers
                 // If floors are the same
                 if (elevator.currentFloor == reqFloor & reqDirection == elevator.currentDirection)
                 {
+                    // elevator gets set as bestElevator by default since 999 is much higher than any score
                     if (bestScore > 1)
                     {
                         bestElevator = elevator;
                         bestScore = 1;
                     }
+                    // If more than 2 elevators can service the request, determine which is closest
                     else if (bestScore == 1)
                     {
                         int bestElevatorGap = Math.Abs(bestElevator.currentFloor - reqFloor);
@@ -329,6 +333,7 @@ namespace Rocket_Elevators_Controllers
                         bestElevator = elevator;
                         bestScore = 2;
                     }
+                    // If more than 2 elevators can service the request, determine which is closest
                     else if (bestScore == 2)
                     {
                         int bestElevatorGap = Math.Abs(bestElevator.currentFloor - reqFloor);
@@ -348,6 +353,7 @@ namespace Rocket_Elevators_Controllers
                         bestElevator = elevator;
                         bestScore = 3;
                     }
+                    // If more than 2 elevators can service the request, determine which is closest
                     else if (bestScore == 3)
                     {
                         int bestElevatorGap = Math.Abs(bestElevator.currentFloor - reqFloor);
@@ -367,6 +373,7 @@ namespace Rocket_Elevators_Controllers
                         bestElevator = elevator;
                         bestScore = 4;
                     }
+                    // If more than 2 elevators can service the request, determine which is closest
                     else if (bestScore == 4)
                     {
                         int bestElevatorGap = Math.Abs(bestElevator.currentFloor - reqFloor);
@@ -388,6 +395,7 @@ namespace Rocket_Elevators_Controllers
                         bestElevator = elevator;
                         bestScore = 1;
                     }
+                    // If more than 2 elevators can service the request, determine which is closest
                     else if (bestScore == 1)
                     {
                         int bestElevatorGap = Math.Abs(bestElevator.currentFloor - reqFloor);
@@ -430,6 +438,9 @@ namespace Rocket_Elevators_Controllers
                     System.Console.WriteLine("I am " + this.elev_Id + " and I'm on floor " + this.currentFloor);
                     this.currentFloor++;
                 }
+                System.Console.WriteLine("I am " + this.elev_Id + " and I'm on floor " + this.currentFloor);
+                // Sequence when elevator has arrived to pick up the user
+                System.Console.WriteLine("Doors opened." + "\n" + "Doors closed.");
             }
             else
             {
