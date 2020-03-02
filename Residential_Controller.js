@@ -30,36 +30,130 @@ class Column {
 	}
 
 	findElevator(requestedFloor, requestDirection) {
+		let bestScore = 999;
+		
 		let BestElevator = null;
+
+		// Determine elevator position
 		column.elevatorList.forEach((elevator) => {
-			if (elevator.currentFloor == requestedFloor) {
-				BestElevator = elevator;
-			} else if (elevator.currentFloor > requestedFloor) {
-				if (
-					requestDirection === 'down' &&
-					elevator.currentDirection === 'down'
-				) {
+			// If floors are the same
+			if (elevator.currentFloor == requestedFloor && requestDirection == elevator.currentDirection) {
+				// elevator gets set as bestElevator by default since 999 is much higher than any score
+				if (bestScore > 1) {
 					BestElevator = elevator;
-				} else {
-					BestElevator = elevator;
+					bestScore = 1;
 				}
-			} else if (elevator.currentFloor < requestedFloor) {
-				if (
-					requestDirection === 'up' &&
-					elevator.currentDirection === 'up'
-				) {
+				// If more than 2 elevators can service the request, determine which is closest
+				else if (bestScore == 1) {
+					let bestElevatorGap = Math.abs(BestElevator.currentFloor - requestedFloor);
+					let newElevatorGap = Math.abs(elevator.currentFloor - requestedFloor);
+
+					if (newElevatorGap < bestElevatorGap) {
+						BestElevator = elevator;
+					}
+				}
+			}
+			// If elevator is above floor requesting elevator & going down
+			else if (elevator.currentFloor > requestedFloor && elevator.currentDirection == "down" && requestDirection == "up") {
+				if (bestScore > 2) {
 					BestElevator = elevator;
-				} else {
+					bestScore = 2;
+				}
+				// If more than 2 elevators can service the request, determine which is closest
+				else if (bestScore == 2) {
+					let bestElevatorGap = Math.abs(BestElevator.currentFloor - requestedFloor);
+					let newElevatorGap = Math.abs(elevator.currentFloor - requestedFloor);
+
+					if (newElevatorGap < bestElevatorGap) {
+						BestElevator = elevator;
+					}
+				}
+			}
+			// If elevator is above floor requesting elevator & going down
+			else if (elevator.currentFloor > requestedFloor && elevator.currentDirection == "down" && requestDirection == "down") {
+				if (bestScore > 3) {
 					BestElevator = elevator;
+					bestScore = 3;
+				}
+				// If more than 2 elevators can service the request, determine which is closest
+				else if (bestScore == 3) {
+					let bestElevatorGap = Math.abs(BestElevator.currentFloor - requestedFloor);
+					let newElevatorGap = Math.abs(elevator.currentFloor - requestedFloor);
+
+					if (newElevatorGap < bestElevatorGap) {
+						BestElevator = elevator;
+					}
+				}
+			}
+			// If elevator is above floor requested elevator & going up
+			else if (elevator.currentFloor > requestedFloor && elevator.currentDirection == "up" && requestDirection == "down") {
+				if (bestScore > 4) {
+					BestElevator = elevator;
+					bestScore = 4;
+				}
+				// If more than 2 elevators can service the request, determine which is closest
+				else if (bestScore == 4) {
+					let bestElevatorGap = Math.abs(BestElevator.currentFloor - requestedFloor);
+					let newElevatorGap = Math.abs(elevator.currentFloor - requestedFloor);
+
+					if (newElevatorGap < bestElevatorGap) {
+						BestElevator = elevator;
+					}
+				}
+			}
+			// If elevator is below floor requested & going up
+
+			// If elevator is below floor requested elevator & going down
+			else if (elevator.currentFloor < requestedFloor && elevator.currentDirection == "up" && requestDirection == "up") {
+				if (bestScore > 1) {
+					BestElevator = elevator;
+					bestScore = 1;
+				}
+				// If more than 2 elevators can service the request, determine which is closest
+				else if (bestScore == 1) {
+					let bestElevatorGap = Math.abs(BestElevator.currentFloor - requestedFloor);
+					let newElevatorGap = Math.abs(elevator.currentFloor - requestedFloor);
+
+					if (newElevatorGap < bestElevatorGap) {
+						BestElevator = elevator;
+					}
 				}
 			}
 		});
-		return BestElevator;
+		console.log("___________________________________________________");
+		return BestElevator; 
 	}
 
+	// findElevator(requestedFloor, requestDirection) {
+	// 	let BestElevator = null;
+	// 	column.elevatorList.forEach((elevator) => {
+	// 		if (elevator.currentFloor == requestedFloor) {
+	// 			BestElevator = elevator;
+	// 		} else if (elevator.currentFloor > requestedFloor) {
+	// 			if (
+	// 				requestDirection === 'down' &&
+	// 				elevator.currentDirection === 'down'
+	// 			) {
+	// 				BestElevator = elevator;
+	// 			} else {
+	// 				BestElevator = elevator;
+	// 			}
+	// 		} else if (elevator.currentFloor < requestedFloor) {
+	// 			if (
+	// 				requestDirection === 'up' &&
+	// 				elevator.currentDirection === 'up'
+	// 			) {
+	// 				BestElevator = elevator;
+	// 			} else {
+	// 				BestElevator = elevator;
+	// 			}
+	// 		}
+	// 	});
+	// 	return BestElevator;
+	// }
+
 	requestElevator(requestedFloor, requestDirection) {
-		let bestElevator = column.findElevator(requestedFloor, requestDirection
-		);
+		let bestElevator = column.findElevator(requestedFloor, requestDirection);
 		bestElevator.requestList.push(requestedFloor);
 		bestElevator.requestList.sort();
 		console.log(
