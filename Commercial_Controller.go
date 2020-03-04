@@ -7,22 +7,6 @@ import (
 	"strconv"
 )
 
-func retry() {
-	var input string
-	fmt.Println("Want to try a new scenario? y/n")
-	fmt.Scan(&input)
-	for input != "y" && input != "n" {
-		fmt.Println("Please type y for yes or n for no")
-		fmt.Scan(&input)
-	}
-	if input == "y" {
-		main()
-	} else if input == "n" {
-		fmt.Println("Program exiting. Thank you.")
-	}
-
-}
-
 // STRUCTURES
 type battery struct {
 	columns        	  []column
@@ -310,28 +294,28 @@ func main() {
 		// going to 2nd, and B5 at 6th floor going to 1st, someone is at 1st floor and requests the 20th floor, 
 		// Elevator5 (B5) is expected to be sent
 
-		// fmt.Println("__________________Elevator Status'_________________")
-		// Battery.columns[1].elevators[0].currentFloor = 20
-		// Battery.columns[1].elevators[0].currentDirection = "down"
-		// fmt.Println(Battery.columns[1].elevators[0].elevID + " on floor " + Battery.columns[1].elevators[0].currentFloor + " going " + Battery.columns[1].elevators[0].currentDirection)
+		fmt.Println("__________________Elevator Status'_________________")
+		Battery.columns[1].elevators[0].currentFloor = 20
+		Battery.columns[1].elevators[0].currentDirection = "down"
+		fmt.Println(Battery.columns[1].elevators[0].elevID + " on floor " + Battery.columns[1].elevators[0].currentFloor + " going " + Battery.columns[1].elevators[0].currentDirection)
 
-		// Battery.columns[1].elevators[1].currentFloor = 3
-		// Battery.columns[1].elevators[1].currentDirection = "up"
-		// fmt.Println(Battery.columns[1].elevators[1].elevID + " on floor " + Battery.columns[1].elevators[1].currentFloor + " going " + Battery.columns[1].elevators[1].currentDirection)
+		Battery.columns[1].elevators[1].currentFloor = 3
+		Battery.columns[1].elevators[1].currentDirection = "up"
+		fmt.Println(Battery.columns[1].elevators[1].elevID + " on floor " + Battery.columns[1].elevators[1].currentFloor + " going " + Battery.columns[1].elevators[1].currentDirection)
 
-		// Battery.columns[1].elevators[2].currentFloor = 13
-		// Battery.columns[1].elevators[2].currentDirection = "down"
-		// fmt.Println(Battery.columns[1].elevators[2].elevID + " on floor " + Battery.columns[1].elevators[2].currentFloor + " going " + Battery.columns[1].elevators[2].currentDirection)
+		Battery.columns[1].elevators[2].currentFloor = 13
+		Battery.columns[1].elevators[2].currentDirection = "down"
+		fmt.Println(Battery.columns[1].elevators[2].elevID + " on floor " + Battery.columns[1].elevators[2].currentFloor + " going " + Battery.columns[1].elevators[2].currentDirection)
 
-		// Battery.columns[1].elevators[3].currentFloor = 15
-		// Battery.columns[1].elevators[3].currentDirection = "down"
-		// fmt.Println(Battery.columns[1].elevators[3].elevID + " on floor " + Battery.columns[1].elevators[3].currentFloor + " going " + Battery.columns[1].elevators[3].currentDirection)
+		Battery.columns[1].elevators[3].currentFloor = 15
+		Battery.columns[1].elevators[3].currentDirection = "down"
+		fmt.Println(Battery.columns[1].elevators[3].elevID + " on floor " + Battery.columns[1].elevators[3].currentFloor + " going " + Battery.columns[1].elevators[3].currentDirection)
 
-		// Battery.columns[1].elevators[4].currentFloor = 6
-		// Battery.columns[1].elevators[4].currentDirection = "down"
-		// fmt.Println(Battery.columns[1].elevators[4].elevID + " on floor " + Battery.columns[1].elevators[4].currentFloor + " going " + Battery.columns[1].elevators[4].currentDirection)
+		Battery.columns[1].elevators[4].currentFloor = 6
+		Battery.columns[1].elevators[4].currentDirection = "down"
+		fmt.Println(Battery.columns[1].elevators[4].elevID + " on floor " + Battery.columns[1].elevators[4].currentFloor + " going " + Battery.columns[1].elevators[4].currentDirection)
 	}
-	// Battery.assignElevator(20, "up").operateElevator(20)
+	Battery.assignElevator(20, "up").operateElevator(20)
 
 
 	// Test 2 --- Someone at 1st floor requests the 36th floor; Elevator1 (C1) is expected to be sent.
@@ -406,25 +390,25 @@ func main() {
 		// B6, someone is at B3 and requests the 1st floor. Elevator A4 is expected to be sent.
 		// Elevator4 (A4) is expected to be sent.
 
-		Battery.columns[0].elevators[0].currentFloor = -4
-		Battery.columns[0].elevators[0].currentDirection = "idle"
-		fmt.Println(Battery.columns[0].elevators[0].elevID + " on floor " + Battery.columns[0].elevators[0].currentFloor + " going " + Battery.columns[0].elevators[0].currentDirection)
+		// Battery.columns[0].elevators[0].currentFloor = -4
+		// Battery.columns[0].elevators[0].currentDirection = "idle"
+		// fmt.Println(Battery.columns[0].elevators[0].elevID + " on floor " + Battery.columns[0].elevators[0].currentFloor + " going " + Battery.columns[0].elevators[0].currentDirection)
 
-		Battery.columns[0].elevators[1].currentFloor = 0
-		Battery.columns[0].elevators[1].currentDirection = "idle"
-		fmt.Println(Battery.columns[0].elevators[1].elevID + " on floor " + Battery.columns[0].elevators[1].currentFloor + " going " + Battery.columns[0].elevators[1].currentDirection)
+		// Battery.columns[0].elevators[1].currentFloor = 0
+		// Battery.columns[0].elevators[1].currentDirection = "idle"
+		// fmt.Println(Battery.columns[0].elevators[1].elevID + " on floor " + Battery.columns[0].elevators[1].currentFloor + " going " + Battery.columns[0].elevators[1].currentDirection)
 
-		Battery.columns[0].elevators[2].currentFloor = -3
-		Battery.columns[0].elevators[2].currentDirection = "down"
-		fmt.Println(Battery.columns[0].elevators[2].elevID + " on floor " + Battery.columns[0].elevators[2].currentFloor + " going " + Battery.columns[0].elevators[2].currentDirection)
+		// Battery.columns[0].elevators[2].currentFloor = -3
+		// Battery.columns[0].elevators[2].currentDirection = "down"
+		// fmt.Println(Battery.columns[0].elevators[2].elevID + " on floor " + Battery.columns[0].elevators[2].currentFloor + " going " + Battery.columns[0].elevators[2].currentDirection)
 
-		Battery.columns[0].elevators[3].currentFloor = -6
-		Battery.columns[0].elevators[3].currentDirection = "up"
-		fmt.Println(Battery.columns[0].elevators[3].elevID + " on floor " + Battery.columns[0].elevators[3].currentFloor + " going " + Battery.columns[0].elevators[3].currentDirection)
+		// Battery.columns[0].elevators[3].currentFloor = -6
+		// Battery.columns[0].elevators[3].currentDirection = "up"
+		// fmt.Println(Battery.columns[0].elevators[3].elevID + " on floor " + Battery.columns[0].elevators[3].currentFloor + " going " + Battery.columns[0].elevators[3].currentDirection)
 
-		Battery.columns[0].elevators[4].currentFloor = -1
-		Battery.columns[0].elevators[4].currentDirection = "down"
-		fmt.Println(Battery.columns[0].elevators[4].elevID + " on floor " + Battery.columns[0].elevators[4].currentFloor + " going " + Battery.columns[0].elevators[4].currentDirection)
+		// Battery.columns[0].elevators[4].currentFloor = -1
+		// Battery.columns[0].elevators[4].currentDirection = "down"
+		// fmt.Println(Battery.columns[0].elevators[4].elevID + " on floor " + Battery.columns[0].elevators[4].currentFloor + " going " + Battery.columns[0].elevators[4].currentDirection)
 	}
-	battery.requestElevator(-3, "up").operateElevator(-3)
+	// battery.requestElevator(-3, "up").operateElevator(-3)
 }
